@@ -13,7 +13,9 @@
         "build": "npm run build --workspace=server && npm run build --workspace=client",
         "build:server": "npm run build --workspace=server",
         "build:client": "npm run build --workspace=client",
-        "start": "npm run start --workspace=server",
+        "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+        "start:server": "npm run start --workspace=server",
+        "start:client": "npm run start --workspace=client",
         "lint": "npm run lint --workspaces",
         "clean": "npm run clean --workspaces",
         "install:all": "npm install && npm install --workspaces"
