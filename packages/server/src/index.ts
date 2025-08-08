@@ -60,6 +60,4 @@ app.use(`${API_PREFIX}/health`, (_req: Request, res: Response) => {
 // Error Handler
 app.use(errorHandler);
 
-app.listen(SERVER_PORT, () => {
-  logger.info(`Server running on ${SERVER_URL}`);
-});
+export default app; 

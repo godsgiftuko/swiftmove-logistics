@@ -5,6 +5,7 @@ config({ path: `${__dirname}/../../../.env` });
 /**
  * Application-wide constants
  */
+export const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // API Version and Prefix
 export const API = {
@@ -73,7 +74,7 @@ export const FILE_UPLOAD = {
 const SERVER_PORT = parseInt(process.env.SERVER_PORT || "9000");
 export const SERVER = {
   PORT: SERVER_PORT,
-  URL: process.env.SERVER_URL || `http://localhost:${SERVER_PORT}`,
+  URL: process.env.SERVER_URL || `http://localhost:${SERVER_PORT}${API.PREFIX}`,
 };
 
 // Database Constants
