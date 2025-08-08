@@ -7,6 +7,11 @@ config({ path: `${__dirname}/../../../.env` });
  */
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 
+export const APP_LOGO = {
+  TRANSPORT: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617629/swiftmove-logistics/swiftmove-logistics-transparent-logo.png',
+  NORMAL: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617588/swiftmove-logistics/swiftmove-logistics-logo.png'
+}
+
 // API Version and Prefix
 export const API = {
   PREFIX: "/api/v1",
