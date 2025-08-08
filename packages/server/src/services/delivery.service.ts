@@ -63,8 +63,7 @@ export class DeliveryService {
     id: mongoose.Types.ObjectId,
     updates: Partial<Omit<IDelivery, "_id" | "id" | "createdAt">>
   ): Promise<ServiceResponse<IDelivery>> {
-    await Delivery.updateOne({ _id: id }, updates,);
-    const delivery = await Delivery.findOne({ _id: id });
+    const delivery = await Delivery.findByIdAndUpdate({ _id: id }, updates,  { new: true });
     return [delivery, null, HTTP_STATUS.OK]
   }
 
@@ -83,11 +82,18 @@ export class DeliveryService {
     const [driver, _error, statusCode] = await UserService.findById(driverId);
     if (!driver) return [null, "Driver not found", statusCode];
 
+    // Update delivery status
     const [updatedDelivery] = await DeliveryService.update(deliveryId, {
       status: 'assigned',
       assignedDriver: driverId,
       assignedBy,
-    })
+    });
+
+    // Update driver status
+    await UserService.update(driver._id, {
+      status: 'busy',
+    });
+
     return [updatedDelivery, null, HTTP_STATUS.OK];
   }
 

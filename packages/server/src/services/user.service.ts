@@ -81,4 +81,13 @@ export class UserService {
     if (!user) return null;
     return user; 
   }
+
+  //  Update user
+  static async update(
+    id: mongoose.Types.ObjectId,
+    updates: Partial<Omit<IUser, "_id" | "id" | "createdAt">>
+  ): Promise<ServiceResponse<IUser>> {
+    const delivery = await User.findByIdAndUpdate({ _id: id }, updates,  { new: true });
+    return [delivery, null, HTTP_STATUS.OK]
+  }
 }
