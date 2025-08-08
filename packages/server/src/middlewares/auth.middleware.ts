@@ -13,34 +13,27 @@ declare global {
 }
 
 /**
- * Middleware to restrict access to certain roles
+ * Middleware to authenticate user
  */
-export const restrictTo = (roles: Array<keyof typeof EUserRole>) => {
-  return async (req: Request, _res: Response, next: NextFunction) => {
-    const user = await UserService.findCurrentUser(req);
-    if (!user) {
-      return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
-    }
-
-    if (!roles.includes(user.role)) {
-      return next(new ForbiddenError('You do not have permission to perform this action'));
-    }
-    
-    next();
-  };
+export const authenticateUser = async (req: Request, _res: Response, next: NextFunction) => {
+  const user = await UserService.findCurrentUser(req);
+  if (!user) {
+    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
+  }
+  
+  next();
 };
 
 /**
  * Middleware to restrict access to certain roles
  */
-export const protectAdminLogin = (req: Request, _res: Response, next: NextFunction) => {
-  if (!req.user) {
-    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
-  }
-
-  if (req.user.role !== EUserRole.admin) {
-    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
-  }
-  
-  next();
+export const restrictTo = (roles: Array<keyof typeof EUserRole>) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
+    const user = await UserService.findCurrentUser(req);
+    if (!roles.includes(user!.role)) {
+      return next(new ForbiddenError('You do not have permission to perform this action'));
+    }
+    
+    next();
+  };
 };

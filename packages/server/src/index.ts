@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.route';
 import deliveryRoutes from './routes/deliveries.route';
 import driverRoutes from './routes/driver.route';
 import { errorHandler } from './middlewares/error_handler';
+import { authenticateUser } from './middlewares/auth.middleware';
 
 connectDB();
 
@@ -26,6 +27,8 @@ app.use(express.static('public'));
 // Middleware logger
 app.use(middlewareLogger);
 
+// Middleware to authenticate user
+app.use(authenticateUser);
 
 // API Routes
 const API_PREFIX = API.PREFIX;
