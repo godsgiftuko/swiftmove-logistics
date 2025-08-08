@@ -1,4 +1,6 @@
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
+import { EDeliveryStatus } from "../models/delivery.model";
+import { DELIVERY } from "@/constants";
 
 export const validateNewDelivery = [
   body("customerName")
@@ -51,4 +53,12 @@ export const validateAssignDriver = [
     param('id')
     .isMongoId()
     .withMessage('Invalid delivery Id'),
+];
+
+
+export const validateDeliveryStatus = [
+  query('status')
+  .optional()
+  .isIn(Object.values(EDeliveryStatus))
+  .withMessage(`Invalid delivery status. Status must be either ${DELIVERY.STATUS.toString()}`),
 ];
