@@ -2,19 +2,16 @@ import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import rateLimit from 'express-rate-limit';
 import connectDB from './database';
-import { API, SERVER } from '@/constants';
+import { API } from '@/constants';
 import morgan from "morgan";
-import { formatResponse } from './middlewares/format_response';
 import { middlewareLogger } from './middlewares/logger.middleware';
 import authRoutes from './routes/auth.route';
-import logger from './logger';
+import deliveryRoutes from './routes/deliveries.route';
 import { errorHandler } from './middlewares/error_handler';
 
 connectDB();
 
 const app = express();
-const SERVER_PORT = SERVER.PORT;
-const SERVER_URL = SERVER.URL;
 
 // Middleware
 app.use(cors());
@@ -50,6 +47,7 @@ app.use('/api', limiter);
 
 // Routes
 app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/deliveries`, deliveryRoutes);
 
 
 // Check Health Status
