@@ -3,6 +3,7 @@ import { NextFunction, Response } from 'express';
 import { HTTP_STATUS } from '../../../shared/constants';
 import { ServiceResponse } from '../types/service';
 import createHttpError from 'http-errors';
+import mongoose from 'mongoose';
 
 type Status = 'success' | 'failed';
 
@@ -37,3 +38,7 @@ export class ControllerResponse {
     return this.res.status(this.statusCode).json(data);
   }
 }
+
+export const isValidId = (id: string): boolean => {{
+  return !mongoose.Types.ObjectId.isValid(id);
+}}
