@@ -11,6 +11,7 @@ export const API = {
   PREFIX: "/api/v1",
   VERSION: "v1",
   TIMEOUT: 30000, // API request timeout in ms
+  NAME: 'Swiftmove Logistics'
 };
 
 // HTTP Status Codes
