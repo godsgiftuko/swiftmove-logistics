@@ -5,7 +5,11 @@ import { ServiceResponse } from "../types/service";
 export class DriverService {
   //  List active drivers
   static async listDrivers(status?: keyof typeof EUserStatus): Promise<ServiceResponse<Array<IUser>>> {
-    const drivers = await User.find({ status: status ? EUserStatus[status] : status, role: EUserRole.driver });
+    const conditions: Partial<Pick<IUser, 'status'>> & { role: EUserRole } = { role: EUserRole.driver }
+    if (status) {
+      conditions.status = status;
+    }
+    const drivers = await User.find(conditions);
     return [drivers, null, HTTP_STATUS.OK];
   }
 }
