@@ -6,5 +6,5 @@ export const validateDriverStatus = [
     query('status')
     .optional()
     .isIn(Object.values(EUserStatus))
-    .withMessage(`Invalid delivery status. Status must be either ${USER.STATUS.toString()}`),
+    .withMessage(`Invalid driver status. Status must be either ${USER.STATUS.toString()}`),
 ];
