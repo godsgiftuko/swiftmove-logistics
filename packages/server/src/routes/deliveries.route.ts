@@ -3,6 +3,7 @@ import DeliveryController from "../controllers/delivery.controller";
 import { restrictTo } from "../middlewares/auth.middleware";
 import {
   validateAssignDriver,
+  validateDeliveryStatus,
   validateNewDelivery,
 } from "../validators/delivery.validator";
 import { expressValidate } from "../middlewares/validation.middleware";
@@ -24,6 +25,7 @@ router.put(
   "/:id/assign",
   restrictTo(["admin", "agent"]),
   expressValidate(validateAssignDriver),
+  expressValidate(validateDeliveryStatus),
   checkDriverAvailability,
   assignOnlyDriver,
   DeliveryController.assignDriver
