@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import { EDeliveryPriority, EDeliveryStatus } from "packages/server/src/models/delivery.model";
 import { EUserRole, EUserStatus } from "packages/server/src/models/user.model";
 
 // Load .env from the root
@@ -59,6 +60,13 @@ export const USER = {
   MIN_PASSWORD_LENGTH: 8,
   MAX_USERNAME_LENGTH: 30,
   DEFAULT_TIMEZONE: "UTC",
+};
+
+
+// Delivery Constants
+export const DELIVERY = {
+  STATUS: Object.values(EDeliveryStatus),
+  PRIORITY: Object.values(EDeliveryPriority),
 };
 
 // Security Constants
