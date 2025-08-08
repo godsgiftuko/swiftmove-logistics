@@ -1,0 +1,31 @@
+{
+    "name": "swiftmove-logistics",
+    "version": "1.0.0",
+    "description": "SwiftMove Logistics - Fullstack logistics dashboard application",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+        "dev:server": "npm run dev --workspace=server",
+        "dev:client": "npm run dev --workspace=client",
+        "build": "npm run build --workspace=server && npm run build --workspace=client",
+        "build:server": "npm run build --workspace=server",
+        "build:client": "npm run build --workspace=client",
+        "start": "npm run start --workspace=server",
+        "lint": "npm run lint --workspaces",
+        "clean": "npm run clean --workspaces",
+        "install:all": "npm install && npm install --workspaces"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "concurrently": "^8.2.2",
+        "typescript": "^5.3.0",
+        "ts-node": "^10.9.2"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=9.0.0"
+    }
+}
