@@ -12,7 +12,7 @@ export class HttpError extends Error {
 }
 
 // 400 - BadRequest
-export class ValidationError extends HttpError {
+export class BadRequestError extends HttpError {
   constructor(message: string) {
     super(message, HTTP_STATUS.BAD_REQUEST);
   }

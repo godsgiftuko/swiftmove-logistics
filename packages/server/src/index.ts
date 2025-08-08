@@ -8,6 +8,7 @@ import { formatResponse } from './middlewares/format_response';
 import { middlewareLogger } from './middlewares/logger.middleware';
 import authRoutes from './routes/auth.route';
 import logger from './logger';
+import { errorHandler } from './middlewares/error_handler';
 
 connectDB();
 
@@ -55,6 +56,9 @@ app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/health`, (_req: Request, res: Response) => {
   res.json({ message: `${API.NAME} is running!` });
 });
+
+// Error Handler
+app.use(errorHandler);
 
 app.listen(SERVER_PORT, () => {
   logger.info(`Server running on ${SERVER_URL}`);
