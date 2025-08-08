@@ -1,7 +1,9 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import connectDB from './database';
-import { SERVER } from '@/constants';
+import { HTTP_STATUS, SERVER } from '@/constants';
+import errorHandler from './middlewares/error_handler.middleware';
+import { HttpError } from './errors/http.error';
 
 connectDB();
 
@@ -14,9 +16,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+
+
+// Global error handler
+app.use(errorHandler);
+
+
 // Routes
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (req: Request, res: Response) => {
   res.json({ message: 'Server is running!', timestamp: new Date().toISOString() });
+});
+
+// 404 handler
+app.all('*', (req: Request, res: Response, next: NextFunction) => {
+  next(new HttpError(`Can't find ${req.originalUrl}`, HTTP_STATUS.NOT_FOUND));
 });
 
 app.listen(SERVER_PORT, () => {
