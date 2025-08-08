@@ -9,6 +9,6 @@ const router = Router();
 
 router.post("/", restrictTo(['admin', 'agent']), expressValidate(validateNewDelivery), DeliveryController.createDelivery);
 router.get("/", restrictTo(['admin']), DeliveryController.listAllDeliveries);
-router.put("/:id/assign", restrictTo(['admin']), expressValidate(validateAssignDriver),assignOnlyDriver, DeliveryController.assignDriver);
+router.put("/:id/assign", restrictTo(['admin', 'agent']), expressValidate(validateAssignDriver),assignOnlyDriver, DeliveryController.assignDriver);
 
 export default router;
