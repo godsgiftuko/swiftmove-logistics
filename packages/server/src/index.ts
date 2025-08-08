@@ -1,13 +1,13 @@
 import express from 'express'
 import cors from 'cors'
 import connectDB from './database';
-import Configs from '@/configs';
+import { SERVER } from '@/constants';
 
 connectDB();
 
 const app = express();
-const SERVER_PORT = Configs.SERVER.SERVER_PORT;
-const SERVER_URL = Configs.SERVER.SERVER_URL;
+const SERVER_PORT = SERVER.PORT;
+const SERVER_URL = SERVER.URL;
 
 // Middleware
 app.use(cors());
