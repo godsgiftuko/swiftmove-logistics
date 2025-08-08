@@ -1,12 +1,13 @@
 import { Router } from "express";
 import DeliveryController from "../controllers/delivery.controller";
 import { restrictTo } from "../middlewares/auth.middleware";
-import { validateNewDelivery } from "../validators/delivery.validator";
+import { validateAssignDriver, validateNewDelivery } from "../validators/delivery.validator";
+import { expressValidate } from "../middlewares/validation.middleware";
 
 const router = Router();
 
-router.post("/", restrictTo(['admin', 'agent']), validateNewDelivery, DeliveryController.createDelivery);
+router.post("/", restrictTo(['admin', 'agent']), expressValidate(validateNewDelivery), DeliveryController.createDelivery);
 router.get("/", restrictTo(['admin']), DeliveryController.listAllDeliveries);
-router.put("/:id/assign", restrictTo(['admin']), DeliveryController.assignDriver);
+router.put("/:id/assign", restrictTo(['admin']), expressValidate(validateAssignDriver), DeliveryController.assignDriver);
 
 export default router;

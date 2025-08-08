@@ -1,6 +1,8 @@
 import { HTTP_STATUS } from "@/constants";
 import { ServiceResponse } from "../types/service";
 import Delivery, { IDelivery } from "../models/delivery.model";
+import { UserService } from "./user.service";
+import mongoose from "mongoose";
 
 export class DeliveryService {
   //  Create delivery
@@ -40,9 +42,20 @@ export class DeliveryService {
   }
 
   //  Find delivery by id
-  static async findById(id: string): Promise<ServiceResponse<IDelivery>> {
+  static async findById(id: mongoose.Types.ObjectId): Promise<ServiceResponse<IDelivery>> {
     const delivery = await Delivery.findOne({ _id: id });
     if (!delivery) return [null, "Delivery not found", HTTP_STATUS.NOT_FOUND];
+    return [delivery, null, HTTP_STATUS.OK];
+  }
+
+  //  Assign driver
+  static async assignDriver(driverId: mongoose.Types.ObjectId, deliveryId: mongoose.Types.ObjectId, assignedBy: mongoose.Types.ObjectId): Promise<ServiceResponse<IDelivery>> {
+    const [delivery, ...rest] = await DeliveryService.findById(deliveryId);
+    if (!delivery) return [null, ...rest];
+
+    const [driver, _error, statusCode] = await UserService.findById(driverId);
+    if (!driver) return [null, "Driver not found", statusCode];
+    
     return [delivery, null, HTTP_STATUS.OK];
   }
 

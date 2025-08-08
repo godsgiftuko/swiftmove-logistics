@@ -3,6 +3,7 @@ import { ControllerResponse } from "../helpers/controller";
 import { HTTP_STATUS } from "@/constants";
 import { DeliveryService } from "../services/delivery.service";
 import { UserService } from "../services/user.service";
+import mongoose from "mongoose";
 
 export default class DeliveryController {
   // create delivery
@@ -37,9 +38,13 @@ export default class DeliveryController {
   }
 
   // Assign driver to delivery
-  static async assignDriver(_req: Request, res: Response, next: NextFunction) {
+  static async assignDriver(req: Request, res: Response, next: NextFunction) {
+    const { driverId } = req.body;
+    const deliveryId = req.params.id as unknown as mongoose.Types.ObjectId; 
+    const assignee = await UserService.findCurrentUser(req);    
+    const response = await DeliveryService.assignDriver(driverId, deliveryId, assignee?.id)
     return new ControllerResponse(res, next).asJSON(
-      [null, null, HTTP_STATUS.OK],
+      response,
       "Driver assigned successfully"
     );
   }

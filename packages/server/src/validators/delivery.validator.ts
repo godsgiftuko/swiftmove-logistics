@@ -41,3 +41,10 @@ export const validateNewDelivery = [
     .optional()
     .isString().withMessage("Notes must be a string"),
 ];
+
+export const validateAssignDriver = [
+  body("driverId")
+    .isString().withMessage("driverId name must be a string")
+    .isMongoId()
+    .withMessage('Invalid driver Id')
+];
