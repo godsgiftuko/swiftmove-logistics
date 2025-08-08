@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { EUserRole } from "packages/server/src/models/user.model";
 
 type DecodedToken = {
-  id: string;
+  id: mongoose.Types.ObjectId;
   role: EUserRole;
   iat: number;
   exp: number;
