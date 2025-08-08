@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { middlewareLogger } from './middlewares/logger.middleware';
 import authRoutes from './routes/auth.route';
 import deliveryRoutes from './routes/deliveries.route';
+import driverRoutes from './routes/driver.route';
 import { errorHandler } from './middlewares/error_handler';
 
 connectDB();
@@ -48,6 +49,7 @@ app.use('/api', limiter);
 // Routes
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/deliveries`, deliveryRoutes);
+app.use(`${API_PREFIX}/drivers`, driverRoutes);
 
 
 // Check Health Status
