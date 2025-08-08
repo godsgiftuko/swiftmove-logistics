@@ -17,8 +17,16 @@ export class DeliveryService {
     notes,
     priority,
   }: Pick<
-  IDelivery,
-    'destinationAddress' | 'createdBy' | 'pickupAddress' | 'customerEmail' | 'customerName' | 'customerPhone' | 'priority' | 'estimatedDeliveryDate' | 'notes'
+    IDelivery,
+    | "destinationAddress"
+    | "createdBy"
+    | "pickupAddress"
+    | "customerEmail"
+    | "customerName"
+    | "customerPhone"
+    | "priority"
+    | "estimatedDeliveryDate"
+    | "notes"
   >): Promise<ServiceResponse<IDelivery>> {
     // Create new delivery
     const delivery = new Delivery({
@@ -42,21 +50,45 @@ export class DeliveryService {
   }
 
   //  Find delivery by id
-  static async findById(id: mongoose.Types.ObjectId): Promise<ServiceResponse<IDelivery>> {
+  static async findById(
+    id: mongoose.Types.ObjectId
+  ): Promise<ServiceResponse<IDelivery>> {
     const delivery = await Delivery.findOne({ _id: id });
     if (!delivery) return [null, "Delivery not found", HTTP_STATUS.NOT_FOUND];
     return [delivery, null, HTTP_STATUS.OK];
   }
 
+  //  Update delivery
+  static async update(
+    id: mongoose.Types.ObjectId,
+    updates: Partial<Omit<IDelivery, "_id" | "id" | "createdAt">>
+  ): Promise<ServiceResponse<IDelivery>> {
+    await Delivery.updateOne({ _id: id }, updates,);
+    const delivery = await Delivery.findOne({ _id: id });
+    return [delivery, null, HTTP_STATUS.OK]
+  }
+
   //  Assign driver
-  static async assignDriver(driverId: mongoose.Types.ObjectId, deliveryId: mongoose.Types.ObjectId, assignedBy: mongoose.Types.ObjectId): Promise<ServiceResponse<IDelivery>> {
+  static async assignDriver(
+    driverId: mongoose.Types.ObjectId,
+    deliveryId: mongoose.Types.ObjectId,
+    assignedBy: mongoose.Types.ObjectId
+  ): Promise<ServiceResponse<IDelivery>> {
+
+    // find delivery
     const [delivery, ...rest] = await DeliveryService.findById(deliveryId);
     if (!delivery) return [null, ...rest];
 
+    // find driver
     const [driver, _error, statusCode] = await UserService.findById(driverId);
     if (!driver) return [null, "Driver not found", statusCode];
-    
-    return [delivery, null, HTTP_STATUS.OK];
+
+    const [updatedDelivery] = await DeliveryService.update(deliveryId, {
+      status: 'assigned',
+      assignedDriver: driverId,
+      assignedBy,
+    })
+    return [updatedDelivery, null, HTTP_STATUS.OK];
   }
 
   //  List deliveries

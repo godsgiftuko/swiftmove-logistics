@@ -44,6 +44,7 @@ export interface IDelivery extends Document {
   deliveryReceiptUrl?: string;
   notes?: string;
   createdBy: mongoose.Types.ObjectId;
+  assignedBy?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -120,6 +121,10 @@ const deliverySchema = new Schema<IDelivery>({
     ref: 'User',
     required: true,
   },
+  assignedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 }, {
   timestamps: true,
 });
@@ -140,7 +145,6 @@ deliverySchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function () 
 });
 
 // Index for efficient querying
-deliverySchema.index({ trackingNumber: 1 });
 deliverySchema.index({ status: 1 });
 deliverySchema.index({ assignedDriver: 1 });
 deliverySchema.index({ createdAt: -1 });
