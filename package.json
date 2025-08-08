@@ -21,6 +21,7 @@
         "install:all": "npm install && npm install --workspaces"
     },
     "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^20.10.0",
         "concurrently": "^8.2.2",
         "ts-node": "^10.9.2",
@@ -31,6 +32,7 @@
         "npm": ">=9.0.0"
     },
     "dependencies": {
+        "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.17.1"
     }
 }
