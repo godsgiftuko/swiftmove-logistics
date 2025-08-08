@@ -2,6 +2,7 @@ import User, { IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
 import Generator from "@/utils/generator";
 import { UserService } from "./user.service";
+import { HTTP_STATUS } from "@/constants";
 
 export class AuthService {
   //  Register user
@@ -12,9 +13,9 @@ export class AuthService {
     >
   ): Promise<ServiceResponse<{ token: string; user: IUser }>> {
     // Create new user
-    const [user, error] = await UserService.createUser(newUser);
+    const [user, error, statusCode] = await UserService.createUser(newUser);
     if (!user) {
-      return [null, error];
+      return [null, error, statusCode];
     }
     // generate JWT token
     const token = Generator.generateToken(user.id, user.role);
@@ -24,25 +25,26 @@ export class AuthService {
         user,
       },
       null,
+      statusCode
     ];
   }
 
   // Login user
-  async loginUser({
+  static async loginUser({
     email,
     password,
   }: Pick<IUser, "email" | "password">): Promise<
     ServiceResponse<{ token: string; user: IUser }>
   > {
     // Find user
-    const user = await User.findOne({ email });
+    const [user, _error, statusCode] = await UserService.findByEmail(email);
     if (!user || !user.isActive) {
-      return [null, "Invalid credentials"];
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return [null, "Invalid credentials"];
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }
     const token = Generator.generateToken(user.id, user.role);
     return [
@@ -51,6 +53,7 @@ export class AuthService {
         user,
       },
       null,
+      statusCode
     ];
   }
 }

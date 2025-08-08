@@ -1,1 +1,1 @@
-export type ServiceResponse<D> = [data: Exclude<D, string> | null, error: string | null];
+export type ServiceResponse<D> = [data: Exclude<D, string> | null, error: string | null, statusCode: number];

@@ -1,5 +1,6 @@
 import { body } from "express-validator";
 import { EUserRole } from "../models/user.model";
+import { USER } from "@/constants";
 
 // New user validation
 export const newUserValidation = [
@@ -24,7 +25,7 @@ export const newUserValidation = [
     .normalizeEmail(),
 
   body("password")
-    .isLength({ min: 6 })
+    .isLength({ min: USER.MIN_PASSWORD_LENGTH })
     .withMessage("Password must be at least 6 characters long")
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&#^()-_+=]{6,}$/)
     .withMessage(
@@ -54,4 +55,26 @@ export const newUserValidation = [
     .withMessage("Role must be a string")
     .isIn(Object.values(EUserRole))
     .withMessage(`Role must be one of: ${Object.values(EUserRole).join(", ")}`),
+];
+
+// user login validation
+export const userLoginValidation = [
+  body("email")
+    .optional()
+    .trim()
+    .isEmail()
+    .withMessage("Must be a valid email address")
+    .normalizeEmail(),
+
+  body("password")
+    .notEmpty()
+    .withMessage(
+      "Please enter your password "
+    ),
+
+  body("phone")
+    .optional()
+    .notEmpty()
+    .matches(/^\+?[1-9]\d{1,14}$/)
+    .withMessage("Phone number must be a valid international format"),
 ];

@@ -47,10 +47,8 @@ export const JWT = {
 
 // User Constants
 export const USER = {
-  ROLES: ["user", "admin", "agent"],
+  ROLES: ["driver", "admin", "agent"],
   STATUS: ["active", "inactive", "suspended", "deleted"],
-  TIER_LEVELS: ["tier1", "tier2", "tier3"],
-  PIN_LENGTH: 4,
   MIN_PASSWORD_LENGTH: 8,
   MAX_USERNAME_LENGTH: 30,
   DEFAULT_TIMEZONE: "UTC",
