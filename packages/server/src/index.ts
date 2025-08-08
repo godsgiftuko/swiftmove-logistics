@@ -20,8 +20,9 @@ app.use(cors());
 app.use(morgan(":method :url :status :response-time ms"));
 app.use(express.json());
 app.use(express.static('public'));
+// app.use(formatResponse);
 
-app.use(formatResponse);
+
 
 // Middleware logger
 app.use(middlewareLogger);
@@ -29,7 +30,6 @@ app.use(middlewareLogger);
 
 // API Routes
 const API_PREFIX = API.PREFIX;
-app.use(`${API_PREFIX}/auth`, authRoutes);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -47,9 +47,13 @@ const limiter = rateLimit({
 // Apply rate limiting to all routes
 app.use('/api', limiter);
 
+// Routes
+app.use(`${API_PREFIX}/auth`, authRoutes);
+
+
 // Check Health Status
 app.use(`${API_PREFIX}/health`, (_req: Request, res: Response) => {
-  res.json({ message: `${API.NAME} is running!`, timestamp: new Date().toISOString() });
+  res.json({ message: `${API.NAME} is running!` });
 });
 
 app.listen(SERVER_PORT, () => {
