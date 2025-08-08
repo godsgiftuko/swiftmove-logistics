@@ -88,6 +88,7 @@ const startServer = async () => {
     // Error handling
     process.on("unhandledRejection", (err: Error) => {
       logger.error("UNHANDLED REJECTION! Shutting down...");
+      logger.error(`${err}`);
       logger.error(err.name, err.message);
       httpServer.close(() => {
         process.exit(1);
