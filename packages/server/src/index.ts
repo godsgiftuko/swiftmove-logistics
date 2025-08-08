@@ -1,9 +1,9 @@
 import express from 'express'
 import cors from 'cors'
-import { config } from 'dotenv'
+import connectDB from './database';
 import { Configs } from './configs';
 
-config();
+connectDB();
 
 const app = express();
 const PORT = Configs.SERVER_PORT;
