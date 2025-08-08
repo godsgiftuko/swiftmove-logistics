@@ -133,6 +133,11 @@ deliverySchema.pre('save', function (next) {
   next();
 });
 
+// Make Mongoose check your schema rules during updates
+deliverySchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function () {
+  this.setOptions({ runValidators: true });
+});
+
 // Index for efficient querying
 deliverySchema.index({ trackingNumber: 1 });
 deliverySchema.index({ status: 1 });

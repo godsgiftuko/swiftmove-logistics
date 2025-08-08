@@ -88,4 +88,10 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
+
+// Make Mongoose check your schema rules during updates
+userSchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function () {
+  this.setOptions({ runValidators: true });
+});
+
 export default mongoose.model<IUser>('User', userSchema);
