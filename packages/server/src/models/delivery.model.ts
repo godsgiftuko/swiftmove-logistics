@@ -64,6 +64,7 @@ const deliverySchema = new Schema<IDelivery>({
     type: String,
     required: true,
     unique: true,
+    immutable: true
   },
   customerName: {
     type: String,
