@@ -45,4 +45,10 @@ export class DeliveryService {
     if (!delivery) return [null, "Delivery not found", HTTP_STATUS.NOT_FOUND];
     return [delivery, null, HTTP_STATUS.OK];
   }
+
+  //  List deliveries
+  static async listDeliveries(): Promise<ServiceResponse<Array<IDelivery>>> {
+    const deliveries = await Delivery.find();
+    return [deliveries, null, HTTP_STATUS.OK];
+  }
 }
