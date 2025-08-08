@@ -14,7 +14,7 @@ declare global {
 /**
  * Middleware to restrict access to certain roles
  */
-export const restrictTo = (...roles: string[]) => {
+export const restrictTo = (roles: Array<keyof typeof EUserRole>) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {
       return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
