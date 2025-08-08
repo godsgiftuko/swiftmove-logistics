@@ -29,7 +29,7 @@ export type DeliveryStatus = 'pending' | 'assigned' | 'in_transit' | 'delivered'
 export type DeliveryPriority = 'low' | 'medium' | 'high';
 
 export interface IDelivery extends Document {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   trackingNumber: string;
   customerName: string;
   customerPhone: string;
