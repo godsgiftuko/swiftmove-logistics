@@ -17,10 +17,16 @@ export class UserService {
     "firstName" | "lastName" | "password" | "email" | "role" | "phone"
   >): Promise<ServiceResponse<IUser>> {
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
       return [null, "User already exists with this email", HTTP_STATUS.CONFLICT];
+    }
+
+    // Check if phone number already exists
+    const existingPhone = await User.findOne({ phone });
+    if (existingPhone) {
+      return [null, "User already exists with this phone number", HTTP_STATUS.CONFLICT];
     }
 
     // Create new user
