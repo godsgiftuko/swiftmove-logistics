@@ -20,4 +20,11 @@ export class DriverService {
     if (!user) return [null, 'Driver not found', HTTP_STATUS.NOT_FOUND];
     return [user, null, HTTP_STATUS.OK];
   }
+
+  //  Update driver
+  static async update(id: mongoose.Types.ObjectId, updates: Partial<Omit<IUser, "_id" | "id" | "createdAt">>): Promise<ServiceResponse<IUser>> {
+    const user = await User.findByIdAndUpdate({ _id: id, role: EUserRole.driver }, updates, { new: true });
+    if (!user) return [null, 'Driver not found', HTTP_STATUS.NOT_FOUND];
+    return [user, null, HTTP_STATUS.OK];
+  }
 }
