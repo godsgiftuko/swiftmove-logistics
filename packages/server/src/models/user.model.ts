@@ -48,7 +48,7 @@ const userSchema = new Schema<IUser>({
   },
   role: {
     type: String,
-    enum: ['admin', 'agent', 'driver'],
+    enum:  Object.values(EUserRole),
     default: 'agent',
   },
   phone: {

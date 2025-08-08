@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import { EUserRole } from "packages/server/src/models/user.model";
 
 // Load .env from the root
 config({ path: `${__dirname}/../../../.env` });
@@ -53,7 +54,7 @@ export const JWT = {
 
 // User Constants
 export const USER = {
-  ROLES: ["driver", "admin", "agent"],
+  ROLES: Object.values(EUserRole),
   STATUS: ["active", "inactive", "suspended", "deleted"],
   MIN_PASSWORD_LENGTH: 8,
   MAX_USERNAME_LENGTH: 30,
