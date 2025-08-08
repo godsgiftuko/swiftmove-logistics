@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ForbiddenError, UnauthorizedError } from '../errors/http.error';
+import { EUserRole } from '../models/user.model';
 
 // Extend the Express Request type to include user property
 declare global {
@@ -25,4 +26,19 @@ export const restrictTo = (...roles: string[]) => {
     
     next();
   };
+};
+
+/**
+ * Middleware to restrict access to certain roles
+ */
+export const protectAdminLogin = (req: Request, _res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
+  }
+
+  if (req.user.role !== EUserRole.admin) {
+    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
+  }
+  
+  next();
 };
