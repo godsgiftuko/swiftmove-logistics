@@ -55,7 +55,7 @@ export default class DeliveryController {
     res: Response,
     next: NextFunction
   ) {
-    const response = await DeliveryService.listDeliveries();
-    return new ControllerResponse(res, next).asJSON(response, "Listed deliveries successfully");
+    const results = (res as any).paginatedResults;
+    return new ControllerResponse(res, next).asJSON([results, null, HTTP_STATUS.OK], "Listed deliveries successfully");
   }
 }

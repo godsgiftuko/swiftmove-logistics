@@ -29,7 +29,7 @@ export function paginate<T extends Document>(model: Model<T>) {
 
       const total = await model.countDocuments(filter);
 
-      res.paginatedResults = {
+      (res as any).paginatedResults = {
         page,
         limit,
         totalPages: Math.ceil(total / limit),

@@ -11,6 +11,8 @@ import {
   assignOnlyDriver,
   checkDriverAvailability,
 } from "../middlewares/delivery.middleware";
+import { paginate } from "../database/helpers/paginate";
+import Delivery, { IDelivery } from "../models/delivery.model";
 
 const router = Router();
 
@@ -20,7 +22,7 @@ router.post(
   expressValidate(validateNewDelivery),
   DeliveryController.createDelivery
 );
-router.get("/", restrictTo(["admin"]), DeliveryController.listAllDeliveries);
+router.get("/", restrictTo(["admin"]), expressValidate(validateDeliveryStatus), paginate(Delivery), DeliveryController.listAllDeliveries);
 router.put(
   "/:id/assign",
   restrictTo(["admin", "agent"]),
