@@ -1,9 +1,9 @@
-import { Configs } from '@/configs';
 import mongoose from 'mongoose';
+import Configs from '@/configs';
 
 const connectDB = async (): Promise<void> => {
   try {
-    const mongoURI = Configs.MONGODB_URI;
+    const mongoURI = Configs.SERVER.MONGODB_URI;
     
     await mongoose.connect(mongoURI);
     
