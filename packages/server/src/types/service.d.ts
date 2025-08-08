@@ -1,0 +1,1 @@
+export type ServiceResponse<D> = [data: Exclude<D, string> | null, error: string | null];
