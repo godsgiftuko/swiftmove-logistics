@@ -18,7 +18,7 @@ export class AuthService {
       return [null, error, statusCode];
     }
     // generate JWT token
-    const token = Generator.generateToken(user.id, user.role);
+    const token = Generator.generateToken(user._id, user.role);
     return [
       {
         token,
@@ -46,7 +46,7 @@ export class AuthService {
     if (!isMatch) {
       return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }
-    const token = Generator.generateToken(user.id, user.role);
+    const token = Generator.generateToken(user._id, user.role);
     return [
       {
         token,
@@ -74,7 +74,7 @@ export class AuthService {
     if (!isMatch) {
       return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }
-    const token = Generator.generateToken(user.id, user.role);
+    const token = Generator.generateToken(user._id, user.role);
     return [
       {
         token,

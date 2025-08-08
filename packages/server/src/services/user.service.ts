@@ -2,6 +2,9 @@ import { HTTP_STATUS } from "@/constants";
 import User, { IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
 import Generator from "@/utils/generator";
+import { extractBearerToken } from "../helpers/http";
+import { Request } from "express";
+import { UnauthorizedError } from "../errors/http.error";
 
 export class UserService {
   //  Create user
@@ -47,7 +50,7 @@ export class UserService {
 
   //  Find user by id
   static async findById(id: string): Promise<ServiceResponse<IUser>> {
-    const user = await User.findOne({ id });
+    const user = await User.findOne({ _id: id });
     if (!user) return [null, 'User not found', HTTP_STATUS.NOT_FOUND];
     return [user, null, HTTP_STATUS.OK];
   }
@@ -64,5 +67,17 @@ export class UserService {
     const user = await User.findOne({ phone });
     if (!user) return [null, 'User not found', HTTP_STATUS.NOT_FOUND];
     return [user, null, HTTP_STATUS.OK];
+  }
+
+  //  Find current user
+  static async findCurrentUser(req: Request) {
+    const token = extractBearerToken(req);
+    if (!token) {
+      throw new UnauthorizedError('You are not logged in! Please log in to get access.')
+    }
+    const decodedToken = Generator.decodeToken(token);
+    const [user] = await UserService.findById(decodedToken.id)
+    if (!user) return null;
+    return user; 
   }
 }
