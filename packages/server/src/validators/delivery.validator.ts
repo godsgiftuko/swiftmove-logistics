@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 export const validateNewDelivery = [
   body("customerName")
@@ -46,5 +46,9 @@ export const validateAssignDriver = [
   body("driverId")
     .isString().withMessage("driverId name must be a string")
     .isMongoId()
-    .withMessage('Invalid driver Id')
+    .withMessage('Invalid driver Id'),
+
+    param('id')
+    .isMongoId()
+    .withMessage('Invalid delivery Id'),
 ];
