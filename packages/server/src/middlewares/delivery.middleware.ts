@@ -9,11 +9,8 @@ import { UserService } from '../services/user.service';
 export const assignOnlyDriver = async (req: Request, _res: Response, next: NextFunction) => {
   const [user] = await UserService.findById(req.body.driverId);
   const assignee = await UserService.findCurrentUser(req);
-  if (!user) {
-    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
-  }
 
-  if (user.role !== EUserRole.driver || assignee!._id == user._id) {
+  if (user!.role !== EUserRole.driver || assignee!._id == user!._id) {
     return next(new ForbiddenError('User is not a driver'));
   }
   
@@ -26,23 +23,20 @@ export const assignOnlyDriver = async (req: Request, _res: Response, next: NextF
  */
 export const checkDriverAvailability = async (req: Request, _res: Response, next: NextFunction) => {
   const [user] = await UserService.findById(req.body.driverId);
-  if (!user) {
-    return next(new UnauthorizedError('You are not logged in! Please log in to get access.'));
-  }
-
-  if (user.status === EUserStatus.busy) {
+ 
+  if (user!.status === EUserStatus.busy) {
     return next(new ForbiddenError('Driver is busy'));
   }
 
-  if (user.status === EUserStatus.suspended) {
+  if (user!.status === EUserStatus.suspended) {
     return next(new ForbiddenError('Driver was suspended'));
   }
 
-  if (user.status === EUserStatus.inactive) {
+  if (user!.status === EUserStatus.inactive) {
     return next(new ForbiddenError('Driver is unavailable'));
   }
 
-  if (user.status === EUserStatus.deleted) {
+  if (user!.status === EUserStatus.deleted) {
     return next(new ForbiddenError('Driver was deleted'));
   }
   
