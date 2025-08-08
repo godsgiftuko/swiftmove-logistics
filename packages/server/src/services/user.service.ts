@@ -5,6 +5,7 @@ import Generator from "@/utils/generator";
 import { extractBearerToken } from "../helpers/http";
 import { Request } from "express";
 import { UnauthorizedError } from "../errors/http.error";
+import mongoose from "mongoose";
 
 export class UserService {
   //  Create user
@@ -49,7 +50,7 @@ export class UserService {
   }
 
   //  Find user by id
-  static async findById(id: string): Promise<ServiceResponse<IUser>> {
+  static async findById(id: mongoose.Types.ObjectId): Promise<ServiceResponse<IUser>> {
     const user = await User.findOne({ _id: id });
     if (!user) return [null, 'User not found', HTTP_STATUS.NOT_FOUND];
     return [user, null, HTTP_STATUS.OK];
