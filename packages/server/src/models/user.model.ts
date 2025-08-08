@@ -10,7 +10,7 @@ export enum EUserRole {
 export type UserRole = keyof typeof EUserRole;
 
 export interface IUser extends Document {
-  _id: string;
+  id: string;
   email: string;
   password: string;
   firstName: string;
