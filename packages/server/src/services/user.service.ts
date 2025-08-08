@@ -52,4 +52,11 @@ export class UserService {
     if (!user) return [null, 'User not found', HTTP_STATUS.NOT_FOUND];
     return [user, null, HTTP_STATUS.OK];
   }
+
+  //  Find user by phone
+  static async findByPhone(phone: string): Promise<ServiceResponse<IUser>> {
+    const user = await User.findOne({ phone });
+    if (!user) return [null, 'User not found', HTTP_STATUS.NOT_FOUND];
+    return [user, null, HTTP_STATUS.OK];
+  }
 }

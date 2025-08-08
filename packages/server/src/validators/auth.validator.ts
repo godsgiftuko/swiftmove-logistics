@@ -59,22 +59,19 @@ export const newUserValidation = [
 
 // user login validation
 export const userLoginValidation = [
-  body("email")
-    .optional()
-    .trim()
+  body('email')
+    .if(body('phone').not().exists()) // only check email if phone is missing
     .isEmail()
-    .withMessage("Must be a valid email address")
-    .normalizeEmail(),
+    .withMessage('Valid email is required if phone is not provided'),
+
+  body('phone')
+    .if(body('email').not().exists()) // only check phone if email is missing
+    .matches(/^\+?[1-9]\d{1,14}$/)
+    .withMessage('Valid phone number is required if email is not provided'),
 
   body("password")
     .notEmpty()
     .withMessage(
       "Please enter your password "
-    ),
-
-  body("phone")
-    .optional()
-    .notEmpty()
-    .matches(/^\+?[1-9]\d{1,14}$/)
-    .withMessage("Phone number must be a valid international format"),
+    )
 ];

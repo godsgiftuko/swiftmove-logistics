@@ -29,8 +29,8 @@ export class AuthService {
     ];
   }
 
-  // Login user
-  static async loginUser({
+  // Login user by email
+  static async loginUserByEmail({
     email,
     password,
   }: Pick<IUser, "email" | "password">): Promise<
@@ -38,6 +38,34 @@ export class AuthService {
   > {
     // Find user
     const [user, _error, statusCode] = await UserService.findByEmail(email);
+    if (!user || !user.isActive) {
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
+    }
+    // Check password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
+    }
+    const token = Generator.generateToken(user.id, user.role);
+    return [
+      {
+        token,
+        user,
+      },
+      null,
+      statusCode
+    ];
+  }
+
+  // Login user by phone
+  static async loginUserByPhone({
+    phone,
+    password,
+  }: Pick<IUser, "phone" | "password">): Promise<
+    ServiceResponse<{ token: string; user: IUser }>
+  > {
+    // Find user
+    const [user, _error, statusCode] = await UserService.findByPhone(phone!);
     if (!user || !user.isActive) {
       return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }
