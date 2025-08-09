@@ -32,9 +32,18 @@ export default class AuthController {
     if (email) {
       response = await AuthService.loginUserByEmail({ email, password });
     } else {
-        response = await AuthService.loginUserByPhone({ phone, password });
+      response = await AuthService.loginUserByPhone({ phone, password });
     }
-    
+
+    return new ControllerResponse(res, next).asJSON(
+      response,
+      "Login successfully"
+    );
+  }
+
+  static async loginAdminUser(req: Request, res: Response, next: NextFunction) {
+    const { email, password } = req.body;
+    const response = await AuthService.loginUserByEmail({ email, password });
     return new ControllerResponse(res, next).asJSON(
       response,
       "Login successfully"

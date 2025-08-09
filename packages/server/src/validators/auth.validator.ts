@@ -74,3 +74,16 @@ export const userLoginValidation = [
       "Please enter your password "
     )
 ];
+
+// admin login validation
+export const adminLoginValidation = [
+  body('email')
+    .isEmail()
+    .withMessage('Please enter your mail'),
+
+  body("password")
+    .notEmpty()
+    .withMessage(
+      "Please enter your password "
+    )
+];

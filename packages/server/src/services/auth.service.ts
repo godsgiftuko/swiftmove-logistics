@@ -1,4 +1,4 @@
-import User, { IUser } from "../models/user.model";
+import User, { EUserRole, IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
 import Generator from "@/utils/generator";
 import { UserService } from "./user.service";
@@ -84,4 +84,37 @@ export class AuthService {
       statusCode
     ];
   }
+
+
+  // Login admin
+  static async loginAdminUser({
+    email,
+    password,
+  }: Pick<IUser, "email" | "password">): Promise<
+    ServiceResponse<{ token: string; user: IUser }>
+  > {
+    // Find user
+    const [user, _error, statusCode] = await UserService.findByEmail(email);
+    if (!user || !user.isActive) {
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
+    }
+    if (user.role !== EUserRole.admin) {
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
+    }
+    // Check password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
+    }
+    const token = Generator.generateToken(user._id, user.role);
+    return [
+      {
+        token,
+        user,
+      },
+      null,
+      statusCode
+    ];
+  }
+
 }
