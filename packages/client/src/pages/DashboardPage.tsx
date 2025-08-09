@@ -1,11 +1,13 @@
+import { useSelector } from 'react-redux';
 import { EUserRole } from '../../../shared/interfaces';
-import { useAuth } from '../context/AuthContext';
 import AdminDashboard from '../components/AdminDashboard';
 import DriverDashboard from '../components/DriverDashboard';
 import ManagerDashboard from '../components/ManagerDashboard';
+import { RootState } from '../store/store';
 
 export default function DashboardPage() {
-    const { user  } = useAuth();
+    const { user } = useSelector((state: RootState) => state.auth);
+    
     if (user!.role === EUserRole.admin) {
         return <AdminDashboard user={user!} />;
     } else if (user!.role === EUserRole.driver) {
