@@ -10,9 +10,11 @@ import { EUserRole } from "../../../server/src/models/user.model";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ButtonLoader from "./ButtonLoader";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { loginUser } = useAuth();
@@ -30,7 +32,12 @@ const Auth = () => {
       : {
           firstName: Yup.string().required("First name is required"),
           lastName: Yup.string().required("Last name is required"),
-          phone: Yup.string().required("Last name is required").min(USER.PHONE_LENGTH,  `Phone number must be ${USER.PHONE_LENGTH} digits`),
+          phone: Yup.string()
+            .required("Last name is required")
+            .min(
+              USER.PHONE_LENGTH,
+              `Phone number must be ${USER.PHONE_LENGTH} digits`
+            ),
           isDriver: Yup.bool().required("isDriver is required"),
           password: Yup.string()
             .required("Password is required")
@@ -53,53 +60,55 @@ const Auth = () => {
 
   const handleSubmit = (values: any, { resetForm }: any) => {
     if (isLogin) {
-        const signinPromise = new Promise<any>((resolve, reject) => {
-            const payload = {
-              email: values.email,
-              password: values.password,
-            };
-            axios
-              .post(`${API.PREFIX}/auth/login`, payload)
-              .then(({ data: resp }) => {
-                const user = resp.data.user;
-                const token = resp.data.token; 
+      const signinPromise = new Promise<any>((resolve, reject) => {
+        setSubmitting(true);
+        const payload = {
+          email: values.email,
+          password: values.password,
+        };
+        axios
+          .post(`${API.PREFIX}/auth/login`, payload)
+          .then(({ data: resp }) => {
+            const user = resp.data.user;
+            const token = resp.data.token;
 
-                loginUser(user, token);
-                resolve(resp.message);
-              })
-              .catch((error) => {
-                if (error?.status === HTTP_STATUS.BAD_REQUEST) {
-                    return reject(error.response.data.message);
-                }
-                const errors = error.response.data.formattedErrors as Array<{
-                  field: string;
-                  message: string;
-                  value: string;
-                }>;
-                reject(errors);
-              });
+            loginUser(user, token);
+            resolve(resp.message);
+          })
+          .catch((error) => {
+            if (error?.status === HTTP_STATUS.BAD_REQUEST) {
+              return reject(error.response.data.message);
+            }
+            const errors = error.response.data.formattedErrors as Array<{
+              field: string;
+              message: string;
+              value: string;
+            }>;
+            reject(errors);
           });
-    
-          toast
-            .promise(signinPromise, {
-              loading: "Signing in...",
-              success: (msg) => {
-                resetForm();
-                setTimeout(() => {
-                    navigate("/dashboard"); 
-                }, 3000);
-                return msg;
-              },
-            })
-            .catch((err) => {
-                if (Array.isArray(err)) {
-                    err.forEach((e: any) => toast.error(e.message));
-                } else {
-                    toast.error(err);
-                }
-            });
+      }).finally(() => setSubmitting(false));
+
+      toast
+        .promise(signinPromise, {
+          loading: "Signing in...",
+          success: (msg) => {
+            resetForm();
+            setTimeout(() => {
+              navigate("/dashboard");
+            }, 3000);
+            return msg;
+          },
+        })
+        .catch((err) => {
+          if (Array.isArray(err)) {
+            err.forEach((e: any) => toast.error(e.message));
+          } else {
+            toast.error(err);
+          }
+        });
     } else {
       const signupPromise = new Promise<any>((resolve, reject) => {
+        setSubmitting(true);
         const payload = {
           firstName: values.firstName,
           lastName: values.lastName,
@@ -112,14 +121,14 @@ const Auth = () => {
           .post(`${API.PREFIX}/auth/register`, payload)
           .then(({ data: resp }) => {
             const user = resp.data.user;
-            const token = resp.data.token; 
+            const token = resp.data.token;
 
             loginUser(user, token);
             resolve(resp.message);
           })
           .catch((error) => {
             if (error?.status === HTTP_STATUS.CONFLICT) {
-                return reject(error.response.data.message);
+              return reject(error.response.data.message);
             }
             const errors = error.response.data.formattedErrors as Array<{
               field: string;
@@ -127,7 +136,7 @@ const Auth = () => {
               value: string;
             }>;
             reject(errors);
-          });
+          }).finally(() => setSubmitting(false));;
       });
 
       toast
@@ -136,17 +145,17 @@ const Auth = () => {
           success: (msg) => {
             resetForm();
             setTimeout(() => {
-                navigate("/dashboard"); 
+              navigate("/dashboard");
             }, 3000);
             return msg;
           },
         })
         .catch((err) => {
-            if (Array.isArray(err)) {
-                err.forEach((e: any) => toast.error(e.message));
-            } else {
-                toast.error(err);
-            }
+          if (Array.isArray(err)) {
+            err.forEach((e: any) => toast.error(e.message));
+          } else {
+            toast.error(err);
+          }
         });
     }
   };
@@ -376,7 +385,11 @@ const Auth = () => {
                 type="submit"
                 className="w-full bg-[#cf1112] hover:bg-[#b50e0f] text-white font-medium py-3 px-4 rounded-lg focus:ring-4 focus:ring-[#cf1112]/50 transition-colors"
               >
-                {isLogin ? "Sign In" : "Sign up"}
+                {
+                  submitting 
+                  ? <ButtonLoader />
+                  : isLogin ? "Sign In" : "Sign up"
+                }
               </button>
             </Form>
           )}
