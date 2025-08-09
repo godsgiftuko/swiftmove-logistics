@@ -3,6 +3,7 @@ import { ServiceResponse } from "../types/service";
 import Delivery, { IDelivery } from "../models/delivery.model";
 import { UserService } from "./user.service";
 import mongoose from "mongoose";
+import { IParcel } from "../models/parcel.model";
 
 export class DeliveryService {
   //  Create delivery
@@ -16,6 +17,7 @@ export class DeliveryService {
     estimatedDeliveryDate,
     notes,
     priority,
+    parcel,
   }: Pick<
     IDelivery,
     | "destinationAddress"
@@ -27,7 +29,7 @@ export class DeliveryService {
     | "priority"
     | "estimatedDeliveryDate"
     | "notes"
-  >): Promise<ServiceResponse<IDelivery>> {
+  > & { parcel: IParcel }): Promise<ServiceResponse<IDelivery>> {
     // Create new delivery
     const delivery = new Delivery({
       trackingNumber: `TRK${Date.now()}`,
@@ -40,6 +42,7 @@ export class DeliveryService {
       priority,
       estimatedDeliveryDate,
       notes,
+      parcel,
       createdBy,
     });
 

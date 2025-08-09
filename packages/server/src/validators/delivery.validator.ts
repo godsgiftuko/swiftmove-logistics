@@ -29,6 +29,14 @@ export const validateNewDelivery = [
   body("destinationAddress.coordinates.lat").isFloat({ min: -90, max: 90 }).withMessage("Destination latitude must be valid"),
   body("destinationAddress.coordinates.lng").isFloat({ min: -180, max: 180 }).withMessage("Destination longitude must be valid"),
 
+
+  // Parcel
+  body("parcel.name").isString().notEmpty().withMessage("Parcel name is required"),
+  body("parcel.weightInKg").isFloat().notEmpty().withMessage("Parcel weight is required"),
+  body("parcel.quantity").isFloat().notEmpty().withMessage("Parcel quantity is required"),
+  body("parcel.isFragile").isBoolean().notEmpty().withMessage("Parcel isFragile is required"),
+  body("parcel.description").isString().optional(),
+
   // Priority
   body("priority")
     .isIn(["low", "medium", "high"])

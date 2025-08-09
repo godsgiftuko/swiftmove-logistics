@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { IParcel } from './parcel.model';
 
 export interface IAddress {
   street: string;
@@ -45,6 +46,7 @@ export interface IDelivery extends Document {
   notes?: string;
   createdBy: mongoose.Types.ObjectId;
   assignedBy?: mongoose.Types.ObjectId;
+  parcel: IParcel;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -88,6 +90,10 @@ const deliverySchema = new Schema<IDelivery>({
   destinationAddress: {
     type: addressSchema,
     required: true,
+  },
+  parcel: {
+    type: Schema.Types.ObjectId,
+    ref: 'Parcel',
   },
   status: {
     type: String,

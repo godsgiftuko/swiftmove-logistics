@@ -4,6 +4,7 @@ import { HTTP_STATUS } from "@/constants";
 import { DeliveryService } from "../services/delivery.service";
 import { UserService } from "../services/user.service";
 import mongoose from "mongoose";
+import { ParcelService } from "../services/parcel.service";
 
 export default class DeliveryController {
   // create delivery
@@ -17,9 +18,11 @@ export default class DeliveryController {
       priority,
       estimatedDeliveryDate,
       notes,
+      parcel: parcelInfo,
     } = req.body;
 
     const user = await UserService.findCurrentUser(req);
+    const [parcel] = await ParcelService.createParcel(parcelInfo);
     const response = await DeliveryService.createDelivery({
       customerName,
       customerPhone,
@@ -30,6 +33,7 @@ export default class DeliveryController {
       estimatedDeliveryDate,
       notes,
       createdBy: user!._id,
+      parcel: parcel!,
     });
     return new ControllerResponse(res, next).asJSON(
       response,
