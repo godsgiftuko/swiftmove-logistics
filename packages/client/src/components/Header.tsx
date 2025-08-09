@@ -4,6 +4,7 @@ export default function Header() {
   const { logoutUser } = useAuth();
   return (
     <header
+     className="flex justify-between"
       style={{
         background: "#fff",
         padding: "0.75rem 1rem",
