@@ -62,4 +62,14 @@ export default class DeliveryController {
     const results = (res as any).paginatedResults;
     return new ControllerResponse(res, next).asJSON([results, null, HTTP_STATUS.OK], "Listed deliveries successfully");
   }
+
+  // Fetch stats
+  static async fetchStats(
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const response = await DeliveryService.fetchStats();
+    return new ControllerResponse(res, next).asJSON(response, "Fetched delivery stats successfully");
+  }
 }

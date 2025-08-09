@@ -32,5 +32,7 @@ router.put(
   assignOnlyDriver,
   DeliveryController.assignDriver
 );
+router.get("/stats", DeliveryController.fetchStats);
+
 
 export default router;
