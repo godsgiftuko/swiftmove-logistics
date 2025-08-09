@@ -4,7 +4,7 @@ import { User, Phone, Calendar } from "lucide-react";
 import DateUtils from "../../../shared/utils/date";
 import { APP_LOGO } from "../../../shared/constants";
 
-export default function UserInfoCard() {
+export default function AdminInfoCard() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   if (!user) {
