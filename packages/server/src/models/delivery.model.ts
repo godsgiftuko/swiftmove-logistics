@@ -1,16 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { IParcel } from './parcel.model';
+import { IAddress } from '@/interfaces';
 
-export interface IAddress {
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
-}
 
 export enum EDeliveryStatus {
     pending = 'pending',
