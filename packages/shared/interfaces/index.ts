@@ -1,10 +1,3 @@
-export interface IAddress {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    coordinates?: {
-      lat: number;
-      lng: number;
-    };
-  }
+export { UserRole, UserStatus, IUser } from "../../../packages/server/src/models/user.model";
+export { EDeliveryPriority, EDeliveryStatus, IDelivery } from "../../../packages/server/src/models/delivery.model";
+export {IParcel } from "../../../packages/server/src/models/parcel.model";
