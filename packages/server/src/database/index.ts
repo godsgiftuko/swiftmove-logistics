@@ -1,6 +1,7 @@
-import { DATABASE } from '@/constants';
 import mongoose from 'mongoose';
+import ServerConfigs from '../configs';
 
+const DATABASE = ServerConfigs.DATABASE;
 const connectDB = async (): Promise<void> => {
   try {
     const mongoURI = DATABASE.CONNECTION_URL;

@@ -3,12 +3,13 @@ import { Server as SocketIOServer, Socket } from "socket.io";
 import app from ".";
 import * as dotenv from "dotenv";
 import logger from "./logger";
-import { NODE_ENV, SERVER } from "@/constants";
 import Generator from "@/utils/generator";
 import { UserService } from "./services/user.service";
+import ServerConfigs  from "./configs";
 
 dotenv.config();
-
+const SERVER = ServerConfigs.SERVER;
+const NODE_ENV = ServerConfigs.NODE_ENV;
 const PORT = SERVER.PORT;
 
 const startServer = async () => {

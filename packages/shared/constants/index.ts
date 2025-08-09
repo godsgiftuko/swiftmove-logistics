@@ -1,13 +1,9 @@
-import { config } from "dotenv";
-import { EDeliveryPriority, EDeliveryStatus } from "packages/server/src/models/delivery.model";
-import { EUserRole, EUserStatus } from "packages/server/src/models/user.model";
+import { EDeliveryPriority, EDeliveryStatus } from "../../../packages/server/src/models/delivery.model";
+import { EUserRole, EUserStatus } from "../../../packages/server/src/models/user.model";
 
-// Load .env from the root
-config({ path: `${__dirname}/../../../.env` });
 /**
  * Application-wide constants
  */
-export const NODE_ENV = process.env.NODE_ENV || 'development';
 
 export const APP_LOGO = {
   TRANSPORT: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617629/swiftmove-logistics/swiftmove-logistics-transparent-logo.png',
@@ -45,14 +41,6 @@ export const PAGINATION = {
   MAX_LIMIT: 100,
 };
 
-// JWT Constants
-export const JWT = {
-  ACCESS_TOKEN_EXPIRE: process.env.JWT_EXPIRE || "24h",
-  REFRESH_TOKEN_EXPIRE: "7d",
-  RESET_TOKEN_EXPIRE: "1h",
-  SECRET: process.env.JWT_SECRET || "RelevancetechBKFhYts",
-};
-
 // User Constants
 export const USER = {
   ROLES: Object.values(EUserRole),
@@ -82,23 +70,4 @@ export const FILE_UPLOAD = {
   MAX_SIZE: 5 * 1024 * 1024, // 5MB
   ALLOWED_TYPES: ["image/jpeg", "image/png", "image/jpg"],
   DELIVERY_RECEIPT_PATH: "uploads/receipts/",
-};
-
-// Server Constants
-const SERVER_PORT = parseInt(process.env.SERVER_PORT || "9000");
-export const SERVER = {
-  PORT: SERVER_PORT,
-  URL: process.env.SERVER_URL || `http://localhost:${SERVER_PORT}${API.PREFIX}`,
-};
-
-// Database Constants
-export const DATABASE = {
-  DATABASE: 'mongodb',
-  CONNECTION_URL:
-    process.env.MONGODB_URI || "mongodb://localhost:27017/swiftmove_logistics",
-};
-
-// Client Constants
-export const CLIENT = {
-  CLIENT_URL: process.env.CLIENT_URL || ''
 };
