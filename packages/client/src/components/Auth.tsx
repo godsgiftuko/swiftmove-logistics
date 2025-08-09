@@ -88,7 +88,7 @@ const Auth = () => {
         .promise(signupPromise, {
           loading: "Signing up...",
           success: (msg) => {
-              // resetForm();
+            resetForm();
             return msg;
           },
         })
