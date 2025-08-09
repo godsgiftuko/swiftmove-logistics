@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { API } from "../../../shared/constants";
 import toast from "react-hot-toast/headless";
+import UserInfoCard from "./UserInfoCard";
 
 export default function AdminDashboard({ user }: { user: IUser }) {
   const { firstName, lastName, role } = user;
@@ -23,11 +24,9 @@ export default function AdminDashboard({ user }: { user: IUser }) {
   })
   .catch(() => toast.error('Could not load records'))
   return (
-    <>
-      <h1>AdminDashboard</h1>
-      <h6 className="text-md font-bold">
-        {firstName} && {lastName} - {role}
-      </h6>
+    <div>
+      <div className="flex flex-col gap-5">
+      <UserInfoCard />
       <ShipmentStats
         total={shipmentStats.total}
         cancelled={shipmentStats.cancelled}
@@ -35,6 +34,7 @@ export default function AdminDashboard({ user }: { user: IUser }) {
         inTransit={shipmentStats.inTransit}
         pending={shipmentStats.pending}
       />
-    </>
+      </div>
+    </div>
   );
 }

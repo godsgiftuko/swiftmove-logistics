@@ -29,7 +29,7 @@ export default function ShipmentStats({
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border"
+          className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm"
         >
           <div className={`p-3 rounded-full ${stat.color}`}>
             <stat.icon size={24} />
