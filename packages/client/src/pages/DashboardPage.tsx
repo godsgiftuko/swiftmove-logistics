@@ -1,16 +1,15 @@
-import { API } from '../../../shared/constants';
+import { EUserRole } from '../../../shared/interfaces';
 import { useAuth } from '../context/AuthContext';
+import AdminDashboard from '../components/AdminDashboard';
+import DriverDashboard from '../components/DriverDashboard';
+import ManagerDashboard from '../components/ManagerDashboard';
 
 export default function DashboardPage() {
-    const { user, logoutUser  } = useAuth();
-    return (
-        <>
-        <h1 className='text-4xl font-bold'>{API.NAME} DashboardPage</h1>
-        <h6 className='text-md font-bold'>{user!.firstName} && {user!.lastName} - {user!.role}</h6>
-        <button className='text-red-500' onClick={() => {
-            logoutUser();
-            
-        }}>Logout</button>
-        </>
-    )
+    const { user  } = useAuth();
+    if (user!.role === EUserRole.admin) {
+        return <AdminDashboard user={user!} />;
+    } else if (user!.role === EUserRole.driver) {
+        return <DriverDashboard user={user!} />
+    } 
+    return <ManagerDashboard user={user!} />
 }

@@ -3,11 +3,13 @@ import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 export default function AppRouter() {
   return (
     <Router>
      <Routes>
+        {/* Auth routes */}
         <Route path="/" index element={
           <AuthRoute>
             <AuthPage />
@@ -18,11 +20,17 @@ export default function AppRouter() {
             <AuthPage />
           </AuthRoute>
         } />
-        <Route path="/dashboard" element={
+
+        {/* Dashboard routes */}
+         <Route path="/dashboard" element={
           <ProtectedRoute>
-              <DashboardPage />
+            <DashboardLayout />
           </ProtectedRoute>
-        } />
+         }>
+          <Route index element={<DashboardPage />} />
+          <Route path="shipping" element={<>shipping</>} />
+        </Route>
+
       </Routes>
   </Router>
   );
