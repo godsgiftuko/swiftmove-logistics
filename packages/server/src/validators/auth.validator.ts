@@ -32,21 +32,20 @@ export const newUserValidation = [
       "Password must contain at least one uppercase letter, one lowercase letter, and one number"
     ),
 
-  body("confirmPassword")
-    .notEmpty()
-    .withMessage("Confirm password is required")
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Passwords do not match");
-      }
-      return true;
-    }),
+  // body("confirmPassword")
+    // .notEmpty()
+    // .withMessage("Confirm password is required")
+    // .custom((value, { req }) => {
+    //   if (value !== req.body.password) {
+    //     throw new Error("Passwords do not match");
+    //   }
+    //   return true;
+    // }),
 
   body("phone")
     .notEmpty()
-    .withMessage("Phone number is required")
-    .matches(/^\+?[1-9]\d{1,14}$/)
-    .withMessage("Phone number must be a valid international format"),
+    .isString()
+    .withMessage("Phone number is required"),
 
   body("role")
     .exists()
@@ -66,7 +65,7 @@ export const userLoginValidation = [
 
   body('phone')
     .if(body('email').not().exists()) // only check phone if email is missing
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .isString()
     .withMessage('Valid phone number is required if email is not provided'),
 
   body("password")

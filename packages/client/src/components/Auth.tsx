@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { User, Mail, Lock, Eye, EyeOff, Phone } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { APP_LOGO, USER, API, HTTP_STATUS } from "../../../shared/constants";
+import { EUserRole } from "../../../server/src/models/user.model";
+import axios from "axios";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,15 +17,23 @@ const Auth = () => {
     email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string()
       .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+      .min(
+        USER.MIN_PASSWORD_LENGTH,
+        `Password must be at least ${USER.MIN_PASSWORD_LENGTH} characters`
+      ),
     ...(isLogin
       ? {}
       : {
           firstName: Yup.string().required("First name is required"),
           lastName: Yup.string().required("Last name is required"),
-          phone: Yup.string().required("Last name is required"),
+          phone: Yup.string().required("Last name is required").min(USER.PHONE_LENGTH,  `Phone number must be ${USER.PHONE_LENGTH} digits`),
           isDriver: Yup.bool().required("isDriver is required"),
-          password: Yup.string().required("Password is required"),
+          password: Yup.string()
+            .required("Password is required")
+            .min(
+              USER.MIN_PASSWORD_LENGTH,
+              `Password must be at least ${USER.MIN_PASSWORD_LENGTH} characters`
+            ),
         }),
   });
 
@@ -40,18 +52,54 @@ const Auth = () => {
       console.log("Login:", { email: values.email, password: values.password });
       toast.success("Login successful!");
     } else {
-      const payload = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-        phone: values.phone,
-        role: values.role,
-      };
-      console.log("Register:", payload);
-      toast.success("Registration successful!");
+      const signupPromise = new Promise<any>((resolve, reject) => {
+        const payload = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          password: values.password,
+          phone: values.phone,
+          role: values.isDriver ? EUserRole.driver : EUserRole.manager,
+        };
+        axios
+          .post(`${API.PREFIX}/auth/register`, payload)
+          .then((response) => {
+            const user = response.data.data; // store user
+
+            console.log({user});
+            
+            resolve(response.data.message);
+          })
+          .catch((error) => {
+            console.error(error);
+            if (error?.status === HTTP_STATUS.CONFLICT) {
+                return reject(error.response.data.message);
+            }
+            const errors = error.response.data.formattedErrors as Array<{
+              field: string;
+              message: string;
+              value: string;
+            }>;
+            reject(errors);
+          });
+      });
+
+      toast
+        .promise(signupPromise, {
+          loading: "Signing up...",
+          success: (msg) => {
+              // resetForm();
+            return msg;
+          },
+        })
+        .catch((err) => {
+            if (Array.isArray(err)) {
+                err.forEach((e: any) => toast.error(e.message));
+            } else {
+                toast.error(err);
+            }
+        });
     }
-    resetForm();
   };
 
   const toggleMode = () => {
@@ -64,11 +112,7 @@ const Auth = () => {
       <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-8">
         <div className="flex justify-center">
           <Link to={"/"}>
-            <img
-              className="md:h-30 h-20"
-              src="https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617588/swiftmove-logistics/swiftmove-logistics-transparent-logo.png"
-              alt=""
-            />
+            <img className="md:h-30 h-20" src={APP_LOGO.TRANSPARENT} alt="" />
           </Link>
         </div>
         <div className="text-center mb-8">

@@ -27,8 +27,8 @@ app.use(express.static('public'));
 // Middleware logger
 app.use(middlewareLogger);
 
-// Middleware to authenticate user
-app.use(authenticateUser);
+// // Middleware to authenticate user
+// app.use(authenticateUser);
 
 // API Routes
 const API_PREFIX = API.PREFIX;

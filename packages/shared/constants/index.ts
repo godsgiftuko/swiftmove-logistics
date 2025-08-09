@@ -6,7 +6,7 @@ import { EUserRole, EUserStatus } from "../../../packages/server/src/models/user
  */
 
 export const APP_LOGO = {
-  TRANSPORT: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617629/swiftmove-logistics/swiftmove-logistics-transparent-logo.png',
+  TRANSPARENT: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617629/swiftmove-logistics/swiftmove-logistics-transparent-logo.png',
   NORMAL: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617588/swiftmove-logistics/swiftmove-logistics-logo.png'
 }
 
@@ -47,6 +47,7 @@ export const USER = {
   STATUS: Object.values(EUserStatus),
   MIN_PASSWORD_LENGTH: 8,
   MAX_USERNAME_LENGTH: 30,
+  PHONE_LENGTH: 11,
   DEFAULT_TIMEZONE: "UTC",
 };
 
