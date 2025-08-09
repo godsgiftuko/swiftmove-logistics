@@ -46,7 +46,7 @@ export default class DeliveryController {
     const { driverId } = req.body;
     const deliveryId = req.params.id as unknown as mongoose.Types.ObjectId; 
     const assignee = await UserService.findCurrentUser(req);    
-    const response = await DeliveryService.assignDriver(driverId, deliveryId, assignee?.id)
+    const response = await DeliveryService.assignDriver(driverId, deliveryId, assignee!._id)
     return new ControllerResponse(res, next).asJSON(
       response,
       "Driver assigned successfully"
