@@ -6,10 +6,10 @@ import { Mail, Lock, Eye, EyeOff} from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { APP_LOGO, USER, API, HTTP_STATUS } from "../../../shared/constants";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ButtonLoader from "./ButtonLoader";
+import api from "../lib/api";
 
 const AdminAuth = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,7 +39,7 @@ const AdminAuth = () => {
           email: values.email,
           password: values.password,
         };
-        axios
+        api
           .post(`${API.PREFIX}/auth/admin/login`, payload)
           .then(({ data: resp }) => {
             const user = resp.data.user;

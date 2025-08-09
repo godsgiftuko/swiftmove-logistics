@@ -7,10 +7,10 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { APP_LOGO, USER, API, HTTP_STATUS } from "../../../shared/constants";
 import { EUserRole } from "../../../server/src/models/user.model";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ButtonLoader from "./ButtonLoader";
+import api from "../lib/api";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -66,7 +66,7 @@ const Auth = () => {
           email: values.email,
           password: values.password,
         };
-        axios
+        api
           .post(`${API.PREFIX}/auth/login`, payload)
           .then(({ data: resp }) => {
             const user = resp.data.user;
@@ -117,7 +117,7 @@ const Auth = () => {
           phone: values.phone,
           role: values.isDriver ? EUserRole.driver : EUserRole.manager,
         };
-        axios
+        api
           .post(`${API.PREFIX}/auth/register`, payload)
           .then(({ data: resp }) => {
             const user = resp.data.user;
