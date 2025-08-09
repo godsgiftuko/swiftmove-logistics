@@ -1,9 +1,7 @@
 import './App.css'
+import AppRouter from './router';
 
 function App() {
-  return (
-    <h1>Swiftmove logistics Dashboard</h1>
-  )
+  return <AppRouter />;
 }
-
 export default App
