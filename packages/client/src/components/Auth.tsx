@@ -9,11 +9,13 @@ import { APP_LOGO, USER, API, HTTP_STATUS } from "../../../shared/constants";
 import { EUserRole } from "../../../server/src/models/user.model";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
 
   const validationSchema = Yup.object({
     email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -53,21 +55,17 @@ const Auth = () => {
     if (isLogin) {
         const signinPromise = new Promise<any>((resolve, reject) => {
             const payload = {
-              firstName: values.firstName,
-              lastName: values.lastName,
               email: values.email,
               password: values.password,
-              phone: values.phone,
-              role: values.isDriver ? EUserRole.driver : EUserRole.manager,
             };
             axios
               .post(`${API.PREFIX}/auth/login`, payload)
-              .then((response) => {
-                const user = response.data.data; // store user
-    
-                console.log({user});
-                
-                resolve(response.data.message);
+              .then(({ data: resp }) => {
+                const user = resp.data.user;
+                const token = resp.data.token; 
+
+                loginUser(user, token);
+                resolve(resp.message);
               })
               .catch((error) => {
                 if (error?.status === HTTP_STATUS.BAD_REQUEST) {
@@ -112,12 +110,12 @@ const Auth = () => {
         };
         axios
           .post(`${API.PREFIX}/auth/register`, payload)
-          .then((response) => {
-            const user = response.data.data; // store user
+          .then(({ data: resp }) => {
+            const user = resp.data.user;
+            const token = resp.data.token; 
 
-            console.log({user});
-            
-            resolve(response.data.message);
+            loginUser(user, token);
+            resolve(resp.message);
           })
           .catch((error) => {
             if (error?.status === HTTP_STATUS.CONFLICT) {
