@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { User, Mail, Lock, Eye, EyeOff, Phone } from "lucide-react";
@@ -35,7 +35,7 @@ const Auth = () => {
     isDriver: false,
   };
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = (values: any, { resetForm }: any) => {
     if (isLogin) {
       console.log("Login:", { email: values.email, password: values.password });
       toast.success("Login successful!");
@@ -87,7 +87,7 @@ const Auth = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ values }) => (
+          {() => (
             <Form className="space-y-6">
               {!isLogin && (
                 <div className="flex gap-5">
