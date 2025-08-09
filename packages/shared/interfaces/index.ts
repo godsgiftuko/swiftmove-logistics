@@ -34,3 +34,34 @@ export interface IUserStats {
   admin: number;
   manager: number;
 }
+
+export interface IDeliveryPayload {
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  pickupStreet: string;
+  pickupCity: string;
+  pickupState: string;
+  pickupZipCode: string;
+  pickupLat: number | "";
+  pickupLng: number | "";
+  destStreet: string;
+  destCity: string;
+  destState: string;
+  destZipCode: string;
+  destLat: number | "";
+  destLng: number | "";
+  parcelName: string;
+  parcelWeightInKg: number | "";
+  parcelQuantity: number | "";
+  parcelIsFragile: boolean;
+  parcelDescription?: string;
+  priority: string;
+  estimatedDeliveryDate: string;
+  notes?: string;
+}
+export interface IApiResponse<T> {
+  status: 'success' | 'failed';
+  message: string;
+  data: T;
+}

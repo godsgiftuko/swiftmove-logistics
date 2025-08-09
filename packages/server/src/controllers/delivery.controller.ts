@@ -37,7 +37,7 @@ export default class DeliveryController {
     });
     return new ControllerResponse(res, next).asJSON(
       response,
-      "Delivery created successfully"
+      "Shipping created successfully"
     );
   }
 

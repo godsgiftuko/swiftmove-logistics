@@ -18,16 +18,16 @@ export const validateNewDelivery = [
   body("pickupAddress.city").isString().notEmpty().withMessage("Pickup city is required"),
   body("pickupAddress.state").isString().notEmpty().withMessage("Pickup state is required"),
   body("pickupAddress.zipCode").isPostalCode("any").withMessage("Invalid pickup ZIP code"),
-  body("pickupAddress.coordinates.lat").isFloat({ min: -90, max: 90 }).withMessage("Pickup latitude must be valid"),
-  body("pickupAddress.coordinates.lng").isFloat({ min: -180, max: 180 }).withMessage("Pickup longitude must be valid"),
+  body("pickupAddress.coordinates.lat").isNumeric().withMessage("Pickup latitude must be valid"),
+  body("pickupAddress.coordinates.lng").isNumeric().withMessage("Pickup longitude must be valid"),
 
   // Destination Address
   body("destinationAddress.street").isString().notEmpty().withMessage("Destination street is required"),
   body("destinationAddress.city").isString().notEmpty().withMessage("Destination city is required"),
   body("destinationAddress.state").isString().notEmpty().withMessage("Destination state is required"),
   body("destinationAddress.zipCode").isPostalCode("any").withMessage("Invalid destination ZIP code"),
-  body("destinationAddress.coordinates.lat").isFloat({ min: -90, max: 90 }).withMessage("Destination latitude must be valid"),
-  body("destinationAddress.coordinates.lng").isFloat({ min: -180, max: 180 }).withMessage("Destination longitude must be valid"),
+  body("destinationAddress.coordinates.lat").isNumeric().withMessage("Destination latitude must be valid"),
+  body("destinationAddress.coordinates.lng").isNumeric().withMessage("Destination longitude must be valid"),
 
 
   // Parcel

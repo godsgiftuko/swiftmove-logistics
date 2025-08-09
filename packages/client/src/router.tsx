@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
+import ShipmentPage from "./pages/ShipmentPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -28,7 +29,7 @@ export default function AppRouter() {
           </ProtectedRoute>
          }>
           <Route index element={<DashboardPage />} />
-          <Route path="shipping" element={<>shipping</>} />
+          <Route path="shipping" element={<ShipmentPage />} />
         </Route>
 
       </Routes>

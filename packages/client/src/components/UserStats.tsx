@@ -1,5 +1,5 @@
 import { IUserStats } from "@/interfaces";
-import { Truck, Package, UserCircle, UserCircle2 } from "lucide-react";
+import { UserCircle, UserCircle2 } from "lucide-react";
 
 export default function UserStats({
   total,
@@ -8,10 +8,10 @@ export default function UserStats({
   manager
 }: IUserStats) {
   const stats = [
-    { label: "Total Users", value: total, icon: Package, color: "bg-blue-100 text-blue-600" },
-    { label: "Admin", value: admin, icon: UserCircle, color: "bg-indigo-100 text-indigo-600" },
-    { label: "Managers", value: manager, icon: UserCircle2, color: "bg-green-100 text-green-600" },
-    { label: "Driver", value: driver, icon: Truck, color: "bg-red-100 text-red-600" }
+    { label: "Total Users", value: total, icon: UserCircle2, color: "bg-blue-100 text-blue-600" },
+    { label: "Admin", value: admin, icon: UserCircle, color: "bg-green-100 text-green-600" },
+    { label: "Managers", value: manager, icon: UserCircle, color: "bg-red-100 text-red-600" },
+    { label: "Driver", value: driver, icon: UserCircle, color: "bg-yellow-100 text-yellow-600" }
   ];
 
   return (

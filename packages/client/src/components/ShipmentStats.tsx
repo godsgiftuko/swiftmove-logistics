@@ -1,4 +1,3 @@
-// src/components/ShipmentStats.tsx
 import { Truck, Package, CheckCircle, Clock, XCircle } from "lucide-react";
 
 interface ShipmentStatsProps {
