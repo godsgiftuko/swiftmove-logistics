@@ -6,7 +6,7 @@ export default function DashboardPage() {
     return (
         <>
         <h1 className='text-4xl font-bold'>{API.NAME} DashboardPage</h1>
-        <h6 className='text-md font-bold'>{user!.firstName} && {user!.lastName}</h6>
+        <h6 className='text-md font-bold'>{user!.firstName} && {user!.lastName} - {user!.role}</h6>
         <button className='text-red-500' onClick={() => {
             logoutUser();
             

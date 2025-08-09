@@ -37,7 +37,7 @@ const AdminAuth = () => {
           password: values.password,
         };
         axios
-          .post(`${API.PREFIX}/auth/login`, payload)
+          .post(`${API.PREFIX}/auth/admin/login`, payload)
           .then(({ data: resp }) => {
             const user = resp.data.user;
             const token = resp.data.token; 
