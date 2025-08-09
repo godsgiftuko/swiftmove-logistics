@@ -18,14 +18,14 @@ const router = Router();
 
 router.post(
   "/",
-  restrictTo(["admin", "agent"]),
+  restrictTo(["admin", "manager"]),
   expressValidate(validateNewDelivery),
   DeliveryController.createDelivery
 );
-router.get("/", restrictTo(["admin"]), expressValidate(validateDeliveryStatus), paginate(Delivery), DeliveryController.listAllDeliveries);
+router.get("/", restrictTo(["admin", "manager"]), expressValidate(validateDeliveryStatus), paginate(Delivery), DeliveryController.listAllDeliveries);
 router.put(
   "/:id/assign",
-  restrictTo(["admin", "agent"]),
+  restrictTo(["admin", "manager"]),
   expressValidate(validateAssignDriver),
   expressValidate(validateDeliveryStatus),
   checkDriverAvailability,
