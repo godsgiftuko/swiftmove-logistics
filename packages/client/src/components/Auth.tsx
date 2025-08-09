@@ -8,10 +8,12 @@ import { Link } from "react-router-dom";
 import { APP_LOGO, USER, API, HTTP_STATUS } from "../../../shared/constants";
 import { EUserRole } from "../../../server/src/models/user.model";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -49,8 +51,55 @@ const Auth = () => {
 
   const handleSubmit = (values: any, { resetForm }: any) => {
     if (isLogin) {
-      console.log("Login:", { email: values.email, password: values.password });
-      toast.success("Login successful!");
+        const signinPromise = new Promise<any>((resolve, reject) => {
+            const payload = {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              email: values.email,
+              password: values.password,
+              phone: values.phone,
+              role: values.isDriver ? EUserRole.driver : EUserRole.manager,
+            };
+            axios
+              .post(`${API.PREFIX}/auth/login`, payload)
+              .then((response) => {
+                const user = response.data.data; // store user
+    
+                console.log({user});
+                
+                resolve(response.data.message);
+              })
+              .catch((error) => {
+                if (error?.status === HTTP_STATUS.BAD_REQUEST) {
+                    return reject(error.response.data.message);
+                }
+                const errors = error.response.data.formattedErrors as Array<{
+                  field: string;
+                  message: string;
+                  value: string;
+                }>;
+                reject(errors);
+              });
+          });
+    
+          toast
+            .promise(signinPromise, {
+              loading: "Signing in...",
+              success: (msg) => {
+                resetForm();
+                setTimeout(() => {
+                    navigate("/dashboard"); 
+                }, 3000);
+                return msg;
+              },
+            })
+            .catch((err) => {
+                if (Array.isArray(err)) {
+                    err.forEach((e: any) => toast.error(e.message));
+                } else {
+                    toast.error(err);
+                }
+            });
     } else {
       const signupPromise = new Promise<any>((resolve, reject) => {
         const payload = {
@@ -71,7 +120,6 @@ const Auth = () => {
             resolve(response.data.message);
           })
           .catch((error) => {
-            console.error(error);
             if (error?.status === HTTP_STATUS.CONFLICT) {
                 return reject(error.response.data.message);
             }
@@ -89,6 +137,9 @@ const Auth = () => {
           loading: "Signing up...",
           success: (msg) => {
             resetForm();
+            setTimeout(() => {
+                navigate("/dashboard"); 
+            }, 3000);
             return msg;
           },
         })
