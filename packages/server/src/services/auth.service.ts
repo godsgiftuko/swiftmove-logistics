@@ -98,6 +98,7 @@ export class AuthService {
     if (!user || !user.isActive) {
       return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }
+
     if (user.role !== EUserRole.admin) {
       return [null, "Invalid credentials", HTTP_STATUS.BAD_REQUEST];
     }

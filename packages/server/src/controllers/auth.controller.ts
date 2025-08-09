@@ -43,7 +43,7 @@ export default class AuthController {
 
   static async loginAdminUser(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
-    const response = await AuthService.loginUserByEmail({ email, password });
+    const response = await AuthService.loginAdminUser({ email, password });
     return new ControllerResponse(res, next).asJSON(
       response,
       "Login successfully"
