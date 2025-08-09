@@ -1,3 +1,3 @@
 export default function AuthPage() {
-    return <h1>AuthPage</h1>
+    return <h1 style={{color: 'white'}}>AuthPage</h1>
 }
