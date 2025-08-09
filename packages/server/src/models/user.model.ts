@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 export enum EUserRole {
   admin = "admin",
-  agent = "agent",
+  manager = "manager",
   driver = "driver",
 }
 
@@ -61,7 +61,6 @@ const userSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: Object.values(EUserRole),
-      default: "agent",
     },
     status: {
       type: String,
