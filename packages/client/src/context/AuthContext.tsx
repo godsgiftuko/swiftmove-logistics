@@ -6,6 +6,7 @@ import { IUser } from "@/interfaces";
 
 interface AuthContextProps {
   user: RootState["auth"]["user"];
+  isAuthenticated: boolean;
   token: string | null;
   loginUser: (user: IUser, token: string) => void;
   logoutUser: () => void;
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user, token } = useSelector((state: RootState) => state.auth);
+  const { user, token, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const loginUser = (user: AuthContextProps["user"], token: string) => {
     dispatch(login({ user, token }));
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, token, loginUser, logoutUser, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
