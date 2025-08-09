@@ -9,9 +9,11 @@ import { APP_LOGO, USER, API, HTTP_STATUS } from "../../../shared/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ButtonLoader from "./ButtonLoader";
 
 const AdminAuth = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const { loginUser } = useAuth();
 
@@ -32,6 +34,7 @@ const AdminAuth = () => {
 
   const handleSubmit = (values: any, { resetForm }: any) => {
     const signinPromise = new Promise<any>((resolve, reject) => {
+        setSubmitting(true);
         const payload = {
           email: values.email,
           password: values.password,
@@ -75,7 +78,7 @@ const AdminAuth = () => {
             } else {
                 toast.error(err);
             }
-        });
+        }).finally(() => setSubmitting(false));
   };
 
   return (
@@ -163,9 +166,9 @@ const AdminAuth = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#141313] hover:bg-[#4e4e4e] text-white font-medium py-3 px-4 rounded-lg focus:ring-4 focus:ring-[#141313]/50 transition-colors"
+                className="relative block w-full bg-[#141313] hover:bg-[#4e4e4e] text-white font-medium py-3 px-4 rounded-lg focus:ring-4 focus:ring-[#141313]/50 transition-colors"
               >
-                Sign In
+                {submitting ? <ButtonLoader color="#fff" /> : 'Sign In'}
               </button>
             </Form>
           )}
