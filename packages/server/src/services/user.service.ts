@@ -6,6 +6,7 @@ import { extractBearerToken } from "../helpers/http";
 import { Request } from "express";
 import { UnauthorizedError } from "../errors/http.error";
 import mongoose from "mongoose";
+import { IUserStats } from "@/interfaces";
 
 export class UserService {
   //  Create user
@@ -89,5 +90,38 @@ export class UserService {
   ): Promise<ServiceResponse<IUser>> {
     const delivery = await User.findByIdAndUpdate({ _id: id }, updates,  { new: true });
     return [delivery, null, HTTP_STATUS.OK]
+  }
+
+
+  //  Fetch stats
+  static async fetchStats(): Promise<ServiceResponse<IUserStats>> {
+    const [roleStats, total] = await Promise.all([
+      User.aggregate([
+        {
+          $group: {
+            _id: "$role",
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+      User.countDocuments(),
+    ]);
+
+    // Initialize shape
+    const userCount: IUserStats = {
+      total,
+      driver: 0,
+      admin: 0,
+      manager: 0,
+    };
+
+    // Map aggregation results into the fixed shape
+    roleStats.forEach((stat) => {
+      if (stat._id && userCount.hasOwnProperty(stat._id)) {
+        userCount[stat._id as keyof typeof userCount] = stat.count;
+      }
+    });
+
+    return [userCount, null, HTTP_STATUS.OK];
   }
 }

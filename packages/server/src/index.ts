@@ -8,6 +8,7 @@ import { middlewareLogger } from './middlewares/logger.middleware';
 import authRoutes from './routes/auth.route';
 import deliveryRoutes from './routes/deliveries.route';
 import driverRoutes from './routes/driver.route';
+import userRoutes from './routes/user.route';
 import { errorHandler } from './middlewares/error_handler';
 import { authenticateUser } from './middlewares/auth.middleware';
 
@@ -53,6 +54,7 @@ app.use('/api', limiter);
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/deliveries`, deliveryRoutes);
 app.use(`${API_PREFIX}/drivers`, driverRoutes);
+app.use(`${API_PREFIX}/users`, userRoutes);
 
 
 // Check Health Status

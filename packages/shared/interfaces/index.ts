@@ -28,3 +28,9 @@ export interface IDeliveryStats {
     high: number;
   };
 };
+export interface IUserStats {
+  total: number;
+  driver: number;
+  admin: number;
+  manager: number;
+}
