@@ -30,7 +30,7 @@ export const checkDriverAvailability = async (req: Request, _res: Response, next
   }
 
   if (user.status === EUserStatus.busy) {
-    return next(new ForbiddenError('Driver is busy. Please try later'));
+    return next(new ForbiddenError('Driver is busy. Please again try later'));
   }
 
   if (user.status === EUserStatus.suspended) {
