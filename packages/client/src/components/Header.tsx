@@ -12,7 +12,7 @@ interface HeaderProps {
 
 export default function Header({ onToggleSidebar }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, isDriver } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleMenuClick = () => {
@@ -36,7 +36,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <Link to={'/dashboard'}>
+        <Link to={"/dashboard"}>
           <h1 className="text-lg font-bold">Dashboard</h1>
         </Link>
         {/* <Link to={'/dashboard'}>
@@ -51,13 +51,15 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
       {/* Right section */}
       <div className="flex items-center gap-4">
         {/* Shipping Link */}
-        <Link
-          to="/dashboard/shipping"
-          className="flex items-center gap-1 text-gray-600 hover:text-[#cf1112] transition"
-        >
-          <Package size={18} />
-          <span className="hidden sm:inline">Shipping</span>
-        </Link>
+        {!isDriver && (
+          <Link
+            to="/dashboard/shipping"
+            className="flex items-center gap-1 text-gray-600 hover:text-[#cf1112] transition"
+          >
+            <Package size={18} />
+            <span className="hidden sm:inline">Shipping</span>
+          </Link>
+        )}
 
         {/* Greeting */}
         <span className="hidden sm:inline text-gray-600">
