@@ -5,7 +5,6 @@ import { DeliveryService } from "../services/delivery.service";
 import { UserService } from "../services/user.service";
 import mongoose from "mongoose";
 import { ParcelService } from "../services/parcel.service";
-
 export default class DeliveryController {
   // create delivery
   static async createDelivery(req: Request, res: Response, next: NextFunction) {
@@ -46,7 +45,7 @@ export default class DeliveryController {
     const { driverId } = req.body;
     const deliveryId = req.params.id as unknown as mongoose.Types.ObjectId; 
     const assignee = await UserService.findCurrentUser(req);    
-    const response = await DeliveryService.assignDriver(driverId, deliveryId, assignee!._id)
+    const response = await DeliveryService.assignDriver(driverId, deliveryId, assignee!._id);
     return new ControllerResponse(res, next).asJSON(
       response,
       "Driver assigned successfully"
