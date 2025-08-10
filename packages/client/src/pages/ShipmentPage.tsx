@@ -4,9 +4,8 @@ import ModalShipmentForm from "../components/ModalShipmentForm";
 import ShipmentRepository from "../repositories/shipment";
 import toast from "react-hot-toast";
 import { IDeliveryPayload } from "../../../shared/interfaces";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { APP_LOGO, HTTP_STATUS } from "../../../shared/constants";
 import ShipmentsTable from "../components/ShipmentsTable";
-
 
 export default function ShipmentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,12 +50,23 @@ export default function ShipmentPage() {
 
   return (
     <div className="p-6">
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="bg-green-600 mb-10 text-white px-4 py-2 rounded hover:bg-green-700"
-      >
-        + New Shipping
-      </button>
+      <div className="flex justify-between items-center">
+        <div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-green-600 mb-10 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            + New Shipping
+          </button>
+        </div>
+        <div>
+          <img
+            src={APP_LOGO.TRANSPARENT}
+            alt="Profile"
+            className="md:h-30 h-20"
+          />
+        </div>
+      </div>
 
       <ModalShipmentForm
         isOpen={isModalOpen}
@@ -64,7 +74,7 @@ export default function ShipmentPage() {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateShipment}
       />
-      <ShipmentsTable/>
+      <ShipmentsTable />
     </div>
   );
 }
