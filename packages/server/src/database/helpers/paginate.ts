@@ -11,7 +11,15 @@ export function paginate<T extends Document>(model: Model<T>) {
     const limit = parseInt(req.query?.limit as string ?? '10') || 10;
     const skip = (page - 1) * limit;
     
-    const filter = req.query?.status ? { status: req.query.status } : {};
+    const filter: any = {};
+
+    if (req.query?.status) {
+      filter['status'] = req.query.status;
+    }
+
+    if (req.query?.role) {
+      filter['role'] = req.query.role;
+    }
     
     const sortField = (req.query?.sortBy as string) || "createdAt";
     const sortOrder = ((req.query?.sortOrder === "desc") ? -1 : 1) as SortOrder;    
