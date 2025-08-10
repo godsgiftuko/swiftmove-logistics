@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "CommonJS",          // Use "ESNext" if you prefer ESM
-    "outDir": "./dist",
+    "outDir": "./public",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
