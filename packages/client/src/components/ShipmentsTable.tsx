@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ObjectId } from "mongodb"; // or from 'mongoose' if you use that
 import ShipmentRepository from "../repositories/shipment";
 import { EDeliveryStatus, IDelivery } from "../../../shared/interfaces";
 import UserRepository from "../repositories/user";
@@ -111,6 +110,8 @@ export default function ShipmentsTable() {
 
   // Open unassign modal
   const openUnassignModal = (deliveryId: string) => {
+    console.log(deliveryId);
+    
     setDropdownOpenId(null);
     setShowUnassignModal(true);
   };
@@ -137,17 +138,17 @@ export default function ShipmentsTable() {
     setDropdownOpenId((prev) => (prev === id ? null : id));
   };
 
-  const isDriverAssigned = (
-    assignedDriver?: string | ObjectId | null,
-    driverId?: string | null
-  ) => {
-    if (!assignedDriver || !driverId) return false;
-    const assignedDriverStr =
-      typeof assignedDriver === "string"
-        ? assignedDriver
-        : assignedDriver.toString();
-    return assignedDriverStr === driverId;
-  };
+  // const isDriverAssigned = (
+  //   assignedDriver?: string | ObjectId | null,
+  //   driverId?: string | null
+  // ) => {
+  //   if (!assignedDriver || !driverId) return false;
+  //   const assignedDriverStr =
+  //     typeof assignedDriver === "string"
+  //       ? assignedDriver
+  //       : assignedDriver.toString();
+  //   return assignedDriverStr === driverId;
+  // };
 
   function closeModal() {
     setSelectedDelivery(null);
@@ -354,7 +355,7 @@ export default function ShipmentsTable() {
               />
               <DetailItem
                 label="Email"
-                value={selectedDelivery.customerEmail}
+                value={selectedDelivery!.customerEmail!}
               />
             </section>
 
@@ -400,7 +401,7 @@ export default function ShipmentsTable() {
 
             {selectedDelivery.assignedDriver && (
               <section className="bg-gray-100 p-4 rounded mt-4">
-                <h4 className="font-semibold mb-1">Driver: </h4> <span>{selectedDelivery.assignedDriver}</span>
+                <h4 className="font-semibold mb-1">Driver: </h4> <span>{selectedDelivery.assignedDriver?.toString()}</span>
                 {/* <span className="whitespace-pre-wrap text-gray-700">
                   Name:   {selectedDelivery.assignedDriver}
                 </span> */}

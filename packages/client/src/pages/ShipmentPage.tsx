@@ -15,7 +15,7 @@ export default function ShipmentPage() {
     const signinPromise = new Promise<any>((resolve, reject) => {
       setSubmitting(true);
       ShipmentRepository.createDelivery(payload)
-        .then(({ data, message, status }) => {
+        .then(({ data, message }) => {
           console.log({ data });
           resolve(message);
         })

@@ -59,6 +59,7 @@ export default function AdminDashboard({ user }: { user: IUser }) {
 
   return (
     <div>
+      <span className="hidden">{user.firstName}</span>
       <div className="flex flex-col gap-5">
       <AdminInfoCard />
       <ShipmentStats

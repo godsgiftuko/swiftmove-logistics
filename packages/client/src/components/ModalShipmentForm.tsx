@@ -96,7 +96,7 @@ export default function ModalShipmentForm({
             onClose();
           }}
         >
-          {({ errors, touched, values, setFieldValue }) => (
+          {({ errors, touched }) => (
             <Form className="space-y-6">
               {/* Layout: Horizontal sections */}
               <div className="flex flex-wrap gap-6">

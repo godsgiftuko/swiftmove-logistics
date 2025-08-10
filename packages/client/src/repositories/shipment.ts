@@ -56,10 +56,10 @@ export default class ShipmentRepository {
 
   // list deliveries
   static async listDeliveries(
-    pageNum: number
+    pageNum: number = 0
   ): Promise<IApiPaginatedResponse<IDelivery>> {
     const { data } = await api.get<IApiPaginatedResponse<IDelivery>>(
-      `${API.PREFIX}/deliveries`
+      `${API.PREFIX}/deliveries?page=${pageNum}`,
     );
     return data;
   }

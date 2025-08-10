@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Loader from './Loader';
 
-const ProtectedRoute = ({ children, redirectTo = '/' }) => {
+const ProtectedRoute = ({ children, redirectTo = '/' }: { children: ReactNode; redirectTo?: string; }) => {
   const { isAuthenticated } = useAuth();
   const [ isLoading, setIsLoading ] = useState<boolean>(true);
   const location = useLocation();
