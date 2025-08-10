@@ -53,8 +53,11 @@ export const checkDriverAvailability = async (req: Request, _res: Response, next
  */
 export const listMyDeliveries = async (req: any, _res: Response, next: NextFunction) => {
   const user = await UserService.findCurrentUser(req);
-  if (user?.role !== EUserRole.admin) {
+  if (user?.role === EUserRole.manager) {
     req.query.createdBy = user?._id;
+  }
+  if (user?.role === EUserRole.driver) {
+    req.query.assignedDriver = user?._id;
   }
   next();
 };
