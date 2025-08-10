@@ -26,7 +26,7 @@ export default class Websocket{
     }
 
     // Listen to specific event
-    static onEvent(event: EWSEvents, callback: (...args: any[]) => void) {
+    static onEvent(event: keyof typeof EWSEvents, callback: (...args: any[]) => void) {
         if (socket.connected) {
             socket.on(event, callback);
         }
