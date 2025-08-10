@@ -1,4 +1,4 @@
-import { IDeliveryStats, IUser, IUserStats } from "@/interfaces";
+import { IDeliveryStats, IUser, IUserStats } from "../../../shared/interfaces";
 import ShipmentStats from "./ShipmentStats";
 import { useEffect, useState } from "react";
 import { API } from "../../../shared/constants";
@@ -10,12 +10,6 @@ import api from "../lib/api";
 
 export default function AdminDashboard({ user }: { user: IUser }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [userStats, setUserStats] = useState({
-    total: 0,
-    driver: 0,
-    admin: 0,
-    manager: 0,
-  });
   const [deliveryStats, setDeliveryStats] = useState({
     total: 0,
     cancelled: 0,
@@ -34,19 +28,13 @@ export default function AdminDashboard({ user }: { user: IUser }) {
   useEffect(() => {
     const fetchDeliveryStats = () =>Promise.all([
       api.get(`${API.PREFIX}/deliveries/stats`),
-      api.get(`${API.PREFIX}/users/stats`),
     ])
-  .then(([deliveryStats, userStats]) => {
+  .then(([deliveryStats]) => {
     const stats = deliveryStats.data.data as IDeliveryStats;
     if (stats) {
       const { statusCount } = stats;
       setDeliveryStats(statusCount);
       // setPriorityStats(priorityCount);
-    }
-
-    const stats2 = userStats.data.data as IUserStats;
-    if (stats2) {
-      setUserStats(stats2);
     }
   })
   .catch(() => toast.error('Could not load records')).finally(() => setIsLoading(false));
@@ -69,12 +57,7 @@ export default function AdminDashboard({ user }: { user: IUser }) {
         inTransit={deliveryStats.inTransit}
         pending={deliveryStats.pending}
       />
-      <UserStats
-        total={userStats.total}
-        admin={userStats.admin}
-        driver={userStats.driver}
-        manager={userStats.manager}
-      />
+      <UserStats />
       </div>
     </div>
   );
