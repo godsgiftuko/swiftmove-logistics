@@ -5,9 +5,9 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
-    "start": "node dist/server/src/server.js",
+    "start": "node public/server/src/server.js",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf node_modules dist"
+    "clean": "rm -rf node_modules public"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
