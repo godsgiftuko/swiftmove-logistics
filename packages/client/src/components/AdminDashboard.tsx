@@ -1,4 +1,4 @@
-import { IDeliveryStats, IUser, IUserStats } from "../../../shared/interfaces";
+import { IDeliveryStats, IUser } from "../../../shared/interfaces";
 import ShipmentStats from "./ShipmentStats";
 import { useEffect, useState } from "react";
 import { API } from "../../../shared/constants";

@@ -1,11 +1,12 @@
 import { IUser } from "@/interfaces";
+import DriverShipmentTable from "./DriverShipmentsTable";
+import DriverInfo from "./DriverInfo";
 
-export default function DriverDashboard({user}: { user: IUser}) {
-    const { firstName, lastName, role } = user
+export default function DriverDashboard({ user }: { user: IUser}) {
     return (
         <>
-        <h1>DriverDashboard</h1>
-        <h6 className='text-md font-bold'>{firstName} && {lastName} - {role}</h6>
+        <DriverInfo user={user} />
+        <DriverShipmentTable />
         </>
     )
 }
