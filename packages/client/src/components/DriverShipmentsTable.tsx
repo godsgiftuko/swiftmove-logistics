@@ -210,9 +210,11 @@ const DriverShipmentTable = () => {
     filterAndSortDeliveries();
   }, [deliveries, searchTerm, statusFilter, pickupCityFilter, destinationCityFilter, priorityFilter, sortField, sortDirection]);
 
-  Websocket.onEvent('DELIVERY', () => {
-    fetchDeliveries(page);
-  });
+  useEffect(() => {
+    Websocket.onEvent('DELIVERY_ASSIGNED', () => {
+      fetchDeliveries(page);
+    });
+    }, []);
 
   return (
     <>
