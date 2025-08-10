@@ -110,6 +110,6 @@ const startServer = async () => {
   }
 };
 
-const server = startServer();
+startServer();
 
-export default server;
+export default app;

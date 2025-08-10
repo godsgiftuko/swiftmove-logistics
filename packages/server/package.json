@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
-    "start": "node public/server/src/server.js",
+    "start": "node public/api/index.js",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf node_modules public"
   },
@@ -15,6 +15,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "http-errors": "^2.0.0",
+    "serverless-http": "^3.2.0",
     "socket.io": "^4.8.1",
     "tsconfig-paths": "^4.2.0"
   },
