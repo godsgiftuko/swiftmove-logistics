@@ -24,6 +24,10 @@ export function paginate<T extends Document>(model: Model<T>, options?: { popula
     if (req.query?.createdBy) {
       filter['createdBy'] = req.query.createdBy;
     }
+
+    if (req.query?.assignedDriver) {
+      filter['assignedDriver'] = req.query.assignedDriver;
+    }
     
     const sortField = (req.query?.sortBy as string) || "createdAt";
     const sortOrder = ((req.query?.sortOrder === "desc") ? -1 : 1) as SortOrder;    
