@@ -1,5 +1,5 @@
 import { HTTP_STATUS } from "@/constants";
-import User, { IUser } from "../models/user.model";
+import User, { EUserRole, IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
 import Generator from "@/utils/generator";
 import { extractBearerToken } from "../helpers/http";
@@ -94,7 +94,8 @@ export class UserService {
 
 
   //  Fetch stats
-  static async fetchStats(): Promise<ServiceResponse<IUserStats>> {
+  static async fetchStats(user: IUser): Promise<ServiceResponse<Partial<IUserStats>>> {
+    const role = user.role;
     const [roleStats, total] = await Promise.all([
       User.aggregate([
         {
@@ -108,7 +109,7 @@ export class UserService {
     ]);
 
     // Initialize shape
-    const userCount: IUserStats = {
+    const userCount: Partial<IUserStats> = {
       total,
       driver: 0,
       admin: 0,
@@ -121,6 +122,12 @@ export class UserService {
         userCount[stat._id as keyof typeof userCount] = stat.count;
       }
     });
+
+    if (role === EUserRole.manager) {
+      delete userCount.total;
+      delete userCount.admin;
+      delete userCount.manager;
+    }
 
     return [userCount, null, HTTP_STATUS.OK];
   }

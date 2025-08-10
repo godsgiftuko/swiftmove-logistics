@@ -7,6 +7,6 @@ import { restrictTo } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.get("/stats", restrictTo(["admin"]), UserController.fetchStats);
+router.get("/stats", restrictTo(["admin", "manager"]), UserController.fetchStats);
 
 export default router;

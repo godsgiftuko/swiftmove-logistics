@@ -6,11 +6,12 @@ import { UserService } from "../services/user.service";
 export default class UserController {
   // Fetch stats
   static async fetchStats(
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
   ) {
-    const response = await UserService.fetchStats();
+    const user = await UserService.findCurrentUser(req);
+    const response = await UserService.fetchStats(user!);
     return new ControllerResponse(res, next).asJSON(response, "Fetched users stats successfully");
   }
 }
