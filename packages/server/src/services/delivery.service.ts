@@ -5,6 +5,7 @@ import { UserService } from "./user.service";
 import mongoose from "mongoose";
 import { IParcel } from "../models/parcel.model";
 import { IDeliveryStats } from "@/interfaces";
+import WebsocketService from "./ws.service";
 export class DeliveryService {
   //  Create delivery
   static async createDelivery({
@@ -97,6 +98,9 @@ export class DeliveryService {
     await UserService.update(driver._id, {
       status: "busy",
     });
+
+    // push event
+    WebsocketService.emitEvent('DELIVERY_ASSIGNED', updatedDelivery);
 
     return [updatedDelivery, null, HTTP_STATUS.OK];
   }
