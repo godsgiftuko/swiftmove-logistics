@@ -1,6 +1,6 @@
 import { body, param, query } from "express-validator";
 import { EDeliveryStatus } from "../models/delivery.model";
-import { DELIVERY } from "@/constants";
+import { DELIVERY } from "../../../shared/constants";
 
 export const validateNewDelivery = [
   body("customerName")

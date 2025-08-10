@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 import { EUserRole } from "../models/user.model";
-import { USER } from "@/constants";
+import { USER } from "../../../shared/constants";
 
 // New user validation
 export const newUserValidation = [

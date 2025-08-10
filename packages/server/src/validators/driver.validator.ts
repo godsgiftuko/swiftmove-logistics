@@ -1,6 +1,6 @@
 import { param, query } from "express-validator";
 import { EUserStatus } from "../models/user.model";
-import { USER } from "@/constants";
+import { USER } from "../../../shared/constants";
 
 export const validateDriverStatus = [
     query('status')

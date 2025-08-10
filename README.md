@@ -14,10 +14,7 @@ To install a package in the server workspace:
 npm install --workspace=server <package>
 
 ```bash
-npm run build
-
-```bash
-npm run start
+npm run dev
 
 
 ## Admin logins

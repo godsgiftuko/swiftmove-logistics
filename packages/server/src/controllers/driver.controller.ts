@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ControllerResponse } from "../helpers/controller";
-import { HTTP_STATUS } from "@/constants";
+import { HTTP_STATUS } from "../../../shared/constants";
 import { DriverService } from "../services/driver.service";
 import mongoose from "mongoose";
 

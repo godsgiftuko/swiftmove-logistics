@@ -3,7 +3,7 @@ import DailyRotateFile from "winston-daily-rotate-file";
 import path from "path";
 import { Request } from "express";
 import { HttpError } from "./errors/http.error";
-import { HTTP_STATUS } from "@/constants";
+import { HTTP_STATUS } from "../../shared/constants";
 
 // Define log levels
 const levels = {

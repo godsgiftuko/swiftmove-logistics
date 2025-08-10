@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from "@/constants";
+import { HTTP_STATUS } from "../../../shared/constants";
 import { ServiceResponse } from "../types/service";
 import Parcel, { IParcel } from "../models/parcel.model";
 

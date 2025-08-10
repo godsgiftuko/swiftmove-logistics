@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from "@/constants";
+import { HTTP_STATUS } from "../../../shared/constants";
 import User, { EUserRole, EUserStatus, IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
 import mongoose from "mongoose";

@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from "@/constants";
+import { HTTP_STATUS } from "../../../shared/constants";
 import { ServiceResponse } from "../types/service";
 import Delivery, { EDeliveryStatus, IDelivery } from "../models/delivery.model";
 import { UserService } from "./user.service";

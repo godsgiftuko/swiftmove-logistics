@@ -1,9 +1,9 @@
-import { EDeliveryPriority, EDeliveryStatus } from "../../../packages/server/src/models/delivery.model";
-import { EUserRole, EUserStatus } from "../../../packages/server/src/models/user.model";
 
 /**
  * Application-wide constants
  */
+
+import { EDeliveryPriority, EDeliveryStatus, EUserRole, EUserStatus } from "../interfaces";
 
 export const APP_LOGO = {
   TRANSPARENT: 'https://res.cloudinary.com/ddeh31zhy/image/upload/v1754617629/swiftmove-logistics/swiftmove-logistics-transparent-logo.png',

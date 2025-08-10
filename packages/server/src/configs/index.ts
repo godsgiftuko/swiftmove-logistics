@@ -1,4 +1,4 @@
-import { API } from "@/constants";
+import { API } from "../../../shared/constants";
 import { config } from "dotenv";
 
 config({ path: `${__dirname}/../../../../.env` });

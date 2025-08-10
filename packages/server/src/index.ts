@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import rateLimit from 'express-rate-limit';
 import connectDB from './database';
-import { API, SECURITY } from '@/constants';
+import { API, SECURITY } from '../../shared/constants';
 import morgan from "morgan";
 import { middlewareLogger } from './middlewares/logger.middleware';
 import authRoutes from './routes/auth.route';
