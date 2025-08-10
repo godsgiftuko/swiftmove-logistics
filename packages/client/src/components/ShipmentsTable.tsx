@@ -3,7 +3,7 @@ import ShipmentRepository from "../repositories/shipment";
 import { EDeliveryStatus, IDelivery } from "../../../shared/interfaces";
 import UserRepository from "../repositories/user";
 import toast from "react-hot-toast";
-import Websocket from "../services/ws";
+// import Websocket from "../services/ws";
 
 interface IDriver {
   _id: string;
@@ -197,6 +197,11 @@ export default function ShipmentsTable() {
 
   // Open assign modal and load drivers
   const openAssignModal = async () => {
+    fetchDrivers()
+    .then((drivers) => {
+      setActiveDriverList(drivers.filter((d) => d.isActive));
+      setAllDriverList(drivers);
+    });
     setDropdownOpenId(null);
     setShowAssignModal(true);
     setSelectedDriverId(null);
@@ -307,9 +312,9 @@ export default function ShipmentsTable() {
     [EDeliveryStatus.cancelled]: "bg-red-100 text-red-800",
   };
 
-  Websocket.onEvent('DELIVERY', () => {
-    fetchDeliveries(page);
-  });
+  // Websocket.onEvent('DELIVERY', () => {
+  //   fetchDeliveries(page);
+  // });
 
   return (
     <>

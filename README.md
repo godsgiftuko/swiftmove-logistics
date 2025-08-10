@@ -5,6 +5,7 @@ SwiftMove Logistics is a logistics management platform designed to streamline sh
 ## App Links
 - **Client App:** [https://swiftmove-logistics-client.vercel.app](https://swiftmove-logistics-client.vercel.app)
 - **API Documentation:** [View Postman Docs](https://documenter.getpostman.com/view/8901262/2sB3BDKr9q#d637128f-3c29-43c8-b7b0-6a332f86b2c5)
+- **GitHub Repository:** [GitHub Repo](https://github.com/godsgiftuko/swiftmove-logistics)
 
 ---
 
