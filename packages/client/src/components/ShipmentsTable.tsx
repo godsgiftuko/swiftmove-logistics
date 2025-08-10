@@ -7,15 +7,30 @@ import toast from "react-hot-toast";
 interface IDriver {
   _id: string;
   name: string;
+  phone?: string;
+  email: string;
   isActive: boolean;
 }
 
+type SortField = 'trackingNumber' | 'customerName' | 'destinationAddress.city' | 'status' | 'estimatedDeliveryDate';
+type SortDirection = 'asc' | 'desc';
+
 export default function ShipmentsTable() {
   const [deliveries, setDeliveries] = useState<IDelivery[]>([]);
+  const [filteredDeliveries, setFilteredDeliveries] = useState<IDelivery[]>([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  // Filtering states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<EDeliveryStatus | "">("");
+  const [cityFilter, setCityFilter] = useState("");
+
+  // Sorting states
+  const [sortField, setSortField] = useState<SortField>('trackingNumber');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
   const [selectedDelivery, setSelectedDelivery] = useState<IDelivery | null>(
     null
@@ -24,7 +39,8 @@ export default function ShipmentsTable() {
 
   // Assign driver modal
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [driverList, setDriverList] = useState<IDriver[]>([]);
+  const [activeDriverList, setActiveDriverList] = useState<IDriver[]>([]);
+  const [allDriverList, setAllDriverList] = useState<IDriver[]>([]);
   const [selectedDriverId, setSelectedDriverId] = useState<string | null>(null);
   const [assigning, setAssigning] = useState(false);
 
@@ -52,14 +68,16 @@ export default function ShipmentsTable() {
   // fetch active drivers
   async function fetchDrivers() {
     return new Promise<IDriver[]>((resolve, reject) => {
-      UserRepository.listActiveDrivers()
+      UserRepository.listDrivers()
         .then(({ data }) => {
           const drivers = data.items;
           resolve(
             drivers.map((driver) => ({
-              name: `${driver.firstName} ${driver.lastName}`,
-              isActive: true,
               _id: driver._id.toString(),
+              name: `${driver.firstName} ${driver.lastName}`,
+              email: driver.email,
+              phone: driver?.phone,
+              isActive: driver.status === 'active',
             }))
           );
         })
@@ -67,17 +85,120 @@ export default function ShipmentsTable() {
     });
   }
 
+  // Filter and sort deliveries
+  const filterAndSortDeliveries = () => {
+    let filtered = [...deliveries];
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(delivery => 
+        delivery.trackingNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        delivery.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        delivery.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        delivery.customerPhone.includes(searchTerm)
+      );
+    }
+
+    // Apply status filter
+    if (statusFilter) {
+      filtered = filtered.filter(delivery => delivery.status === statusFilter);
+    }
+
+    // Apply city filter
+    if (cityFilter) {
+      filtered = filtered.filter(delivery => 
+        delivery.destinationAddress.city.toLowerCase().includes(cityFilter.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let aValue: any;
+      let bValue: any;
+
+      switch (sortField) {
+        case 'trackingNumber':
+          aValue = a.trackingNumber;
+          bValue = b.trackingNumber;
+          break;
+        case 'customerName':
+          aValue = a.customerName;
+          bValue = b.customerName;
+          break;
+        case 'destinationAddress.city':
+          aValue = a.destinationAddress.city;
+          bValue = b.destinationAddress.city;
+          break;
+        case 'status':
+          aValue = a.status;
+          bValue = b.status;
+          break;
+        case 'estimatedDeliveryDate':
+          aValue = new Date(a.estimatedDeliveryDate);
+          bValue = new Date(b.estimatedDeliveryDate);
+          break;
+        default:
+          aValue = a.trackingNumber;
+          bValue = b.trackingNumber;
+      }
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    setFilteredDeliveries(filtered);
+  };
+
+  // Handle sort
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  // Get sort indicator
+  const getSortIndicator = (field: SortField) => {
+    if (sortField !== field) return '↕️';
+    return sortDirection === 'asc' ? '↑' : '↓';
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("");
+    setCityFilter("");
+    setSortField('trackingNumber');
+    setSortDirection('asc');
+  };
+
+  // Get unique cities for filter dropdown
+  const getUniqueCities = () => {
+    const cities = deliveries.map(d => d.destinationAddress.city);
+    return [...new Set(cities)].sort();
+  };
+
   useEffect(() => {
     fetchDeliveries(page);
+    fetchDrivers()
+    .then((drivers) => {
+      setActiveDriverList(drivers.filter((d) => d.isActive));
+      setAllDriverList(drivers);
+    });
   }, [page]);
+
+  useEffect(() => {
+    filterAndSortDeliveries();
+  }, [deliveries, searchTerm, statusFilter, cityFilter, sortField, sortDirection]);
 
   // Open assign modal and load drivers
   const openAssignModal = async () => {
     setDropdownOpenId(null);
     setShowAssignModal(true);
     setSelectedDriverId(null);
-    const drivers = await fetchDrivers();
-    setDriverList(drivers.filter((d) => d.isActive));
   };
 
   // Assign driver to selected delivery
@@ -157,13 +278,24 @@ export default function ShipmentsTable() {
   // Get assigned driver name if available
   const getAssignedDriverName = () => {
     if (!selectedDelivery?.assignedDriver) return "No driver assigned";
-    // Try to get from driverList if available, fallback to id
+    // Try to get from activeDriverList if available, fallback to id
     const assignedId =
       typeof selectedDelivery.assignedDriver === "string"
         ? selectedDelivery.assignedDriver
         : selectedDelivery.assignedDriver.toString();
-    const driver = driverList.find((d) => d._id === assignedId);
+    const driver = activeDriverList.find((d) => d._id === assignedId);
     return driver ? driver.name : assignedId;
+  };
+
+  // Get assigned driver
+  const getAssignedDriver = (): IDriver | undefined => {
+    if (!selectedDelivery?.assignedDriver) return undefined;
+    const assignedId =
+      typeof selectedDelivery.assignedDriver === "string"
+        ? selectedDelivery.assignedDriver
+        : selectedDelivery.assignedDriver.toString();
+    const driver = allDriverList.find((d) => d._id === assignedId);
+    return driver;
   };
 
   const deliveryStatusColors: Record<EDeliveryStatus, string> = {
@@ -173,8 +305,104 @@ export default function ShipmentsTable() {
     [EDeliveryStatus.delivered]: "bg-green-100 text-green-800",
     [EDeliveryStatus.cancelled]: "bg-red-100 text-red-800",
   };
+
   return (
     <>
+      {/* Filters and Search */}
+      <div className="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-300">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          {/* Search Input */}
+          <div>
+            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+              Search
+            </label>
+            <input
+              id="search"
+              type="text"
+              placeholder="Search tracking #, customer, email, phone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#cf1112] focus:border-[#cf1112]"
+            />
+          </div>
+
+          {/* Status Filter */}
+          <div>
+            <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
+              Status
+            </label>
+            <select
+              id="status-filter"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as EDeliveryStatus | "")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#cf1112] focus:border-[#cf1112]"
+            >
+              <option value="">All Statuses</option>
+              {Object.values(EDeliveryStatus).map(status => (
+                <option key={status} value={status} className="capitalize">
+                  {status.replace('_', ' ')}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* City Filter */}
+          <div>
+            <label htmlFor="city-filter" className="block text-sm font-medium text-gray-700 mb-1">
+              Destination City
+            </label>
+            <select
+              id="city-filter"
+              value={cityFilter}
+              onChange={(e) => setCityFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#cf1112] focus:border-[#cf1112]"
+            >
+              <option value="">All Cities</option>
+              {getUniqueCities().map(city => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Clear Filters Button */}
+          <div className="flex items-end">
+            <button
+              onClick={clearFilters}
+              className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        </div>
+
+        {/* Active Filters Display */}
+        {(searchTerm || statusFilter || cityFilter) && (
+          <div className="flex flex-wrap gap-2 text-sm">
+            <span className="text-gray-600">Active filters:</span>
+            {searchTerm && (
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                Search: "{searchTerm}"
+              </span>
+            )}
+            {statusFilter && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded capitalize">
+                Status: {statusFilter.replace('_', ' ')}
+              </span>
+            )}
+            {cityFilter && (
+              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                City: {cityFilter}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Results Count */}
+        <div className="mt-2 text-sm text-gray-600">
+          Showing {filteredDeliveries.length} of {deliveries.length} deliveries
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded shadow-sm">
           <thead className="bg-gray-100">
@@ -182,17 +410,29 @@ export default function ShipmentsTable() {
               <th className="text-left py-3 px-4 font-semibold text-gray-700 border-b">
                 S/N
               </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700 border-b">
-                Tracking #
+              <th 
+                className="text-left py-3 px-4 font-semibold text-gray-700 border-b cursor-pointer hover:bg-gray-200 transition-colors"
+                onClick={() => handleSort('trackingNumber')}
+              >
+                Tracking # {getSortIndicator('trackingNumber')}
               </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700 border-b">
-                Customer
+              <th 
+                className="text-left py-3 px-4 font-semibold text-gray-700 border-b cursor-pointer hover:bg-gray-200 transition-colors"
+                onClick={() => handleSort('customerName')}
+              >
+                Customer {getSortIndicator('customerName')}
               </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700 border-b">
-                Destination
+              <th 
+                className="text-left py-3 px-4 font-semibold text-gray-700 border-b cursor-pointer hover:bg-gray-200 transition-colors"
+                onClick={() => handleSort('destinationAddress.city')}
+              >
+                Destination {getSortIndicator('destinationAddress.city')}
               </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700 border-b">
-                Status
+              <th 
+                className="text-left py-3 px-4 font-semibold text-gray-700 border-b cursor-pointer hover:bg-gray-200 transition-colors"
+                onClick={() => handleSort('status')}
+              >
+                Status {getSortIndicator('status')}
               </th>
               <th className="text-center py-3 px-4 font-semibold text-gray-700 border-b">
                 Action
@@ -206,14 +446,14 @@ export default function ShipmentsTable() {
                   Loading...
                 </td>
               </tr>
-            ) : deliveries.length === 0 ? (
+            ) : filteredDeliveries.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-6 text-gray-500">
-                  No deliveries found.
+                  {deliveries.length === 0 ? "No deliveries found." : "No deliveries match your filters."}
                 </td>
               </tr>
             ) : (
-              deliveries.map((d, index) => {
+              filteredDeliveries.map((d, index) => {
                 const sn = (page - 1) * limit + index + 1;
                 return (
                   <tr
@@ -399,20 +639,24 @@ export default function ShipmentsTable() {
               </section>
             )}
 
-            {selectedDelivery.assignedDriver && (
+            {selectedDelivery.assignedDriver && getAssignedDriver() && (
               <section className="bg-gray-100 p-4 rounded mt-4">
-                <h4 className="font-semibold mb-1">Driver: </h4> <span>{selectedDelivery.assignedDriver?.toString()}</span>
-                {/* <span className="whitespace-pre-wrap text-gray-700">
-                  Name:   {selectedDelivery.assignedDriver}
-                </span> */}
-                {/* <br />
+                <h4 className="font-semibold mb-1">Driver</h4>
                 <span className="whitespace-pre-wrap text-gray-700">
-                  Email: 
+                  Name: {getAssignedDriver()?.name}
                 </span>
                 <br />
                 <span className="whitespace-pre-wrap text-gray-700">
-                  Phone: 
-                </span> */}
+                  Email: {getAssignedDriver()?.email}
+                </span>
+                <br />
+                {
+                  getAssignedDriver()?.phone && (
+                    <span className="whitespace-pre-wrap text-gray-700">
+                      Phone: {getAssignedDriver()?.phone}
+                    </span>
+                  )
+                }
               </section>
             )}
 
@@ -445,11 +689,11 @@ export default function ShipmentsTable() {
             </h3>
 
             <div className="max-h-60 overflow-y-auto mb-4 border border-gray-200 rounded p-2">
-              {driverList.length === 0 ? (
+              {activeDriverList.length === 0 ? (
                 <p>No active drivers available.</p>
               ) : (
                 <ul>
-                  {driverList.map((driver) => (
+                  {activeDriverList.map((driver) => (
                     <li key={driver._id} className="mb-2">
                       <label className="flex items-center space-x-2 cursor-pointer">
                         <input
