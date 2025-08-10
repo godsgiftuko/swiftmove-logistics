@@ -98,7 +98,7 @@ export class DeliveryService {
     await UserService.update(driver._id, {
       status: "busy",
     });
-
+    
     // push event
     WebsocketService.emitEvent('DELIVERY_ASSIGNED', updatedDelivery);
 
