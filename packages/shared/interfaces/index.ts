@@ -65,3 +65,15 @@ export interface IApiResponse<T> {
   message: string;
   data: T;
 }
+
+export interface IApiPaginatedResponse<T> {
+  status: 'success' | 'failed'
+  message: string;
+  data: {
+    page: number;
+    limit: number;
+    totalPages: number;
+    totalItems: number;
+    items: T[];
+  };
+}
