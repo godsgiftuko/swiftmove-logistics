@@ -5,6 +5,7 @@ import ShipmentPage from "./pages/ShipmentPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+import { RequireRole } from "./components/RequireRole";
 
 export default function AppRouter() {
   return (
@@ -29,7 +30,11 @@ export default function AppRouter() {
           </ProtectedRoute>
          }>
           <Route index element={<DashboardPage />} />
-          <Route path="shipping" element={<ShipmentPage />} />
+          <Route path="shipping" element={
+            <RequireRole allowedRoles={['admin', 'manager']}>
+              <ShipmentPage />
+            </RequireRole>
+          } />
         </Route>
 
       </Routes>
