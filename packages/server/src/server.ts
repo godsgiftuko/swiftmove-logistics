@@ -12,24 +12,25 @@ const SERVER = ServerConfigs.SERVER;
 const NODE_ENV = ServerConfigs.NODE_ENV;
 const PORT = SERVER.PORT;
 
+ // Create HTTP server wrapping your Express app
+ const httpServer = http.createServer(app);
+
+ // Initialize Socket.IO server with CORS if needed
+ export const io = new SocketIOServer(httpServer, {
+   cors: {
+     origin: "*",
+     methods: ["GET", "POST"],
+   },
+   pingInterval: 15000,
+   pingTimeout: 30000,
+});
+
 const startServer = async () => {
   try {
     logger.info("Starting server...");
     logger.info(`Environment: ${NODE_ENV}`);
     logger.info(`Target port: ${PORT}`);
 
-    // Create HTTP server wrapping your Express app
-    const httpServer = http.createServer(app);
-
-    // Initialize Socket.IO server with CORS if needed
-    const io = new SocketIOServer(httpServer, {
-      cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-      },
-      pingInterval: 15000,
-      pingTimeout: 30000,
-    });
 
     // Start listening with the HTTP server
     httpServer.listen(PORT, "0.0.0.0", () => {
