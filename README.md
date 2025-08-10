@@ -8,10 +8,21 @@ SwiftMove Logistics is a logistics management platform designed to streamline sh
 
 ---
 
-## 📦 Server
+## Server
 To install a package in the server workspace:
 ```bash
 npm install --workspace=server <package>
+
+```bash
+npm run build
+
+```bash
+npm run start
+
+
+## Admin logins
+**Email:** `admin@gmail.com`  
+**Password:** `12345678ABCxyz#$`
 
 
 # Shipment Flow
