@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../store/authSlice";
 import type { RootState, AppDispatch } from "../store/store";
 import { EUserRole, IUser } from "@/interfaces";
+import Websocket from "../services/ws";
 
 interface AuthContextProps {
   user: RootState["auth"]["user"];
@@ -21,10 +22,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const loginUser = (user: AuthContextProps["user"], token: string) => {
     dispatch(login({ user, token }));
+    Websocket.connect(user!);
   };
 
   const logoutUser = () => {
     dispatch(logout());
+    Websocket.disconnect();
   };
 
   return (
