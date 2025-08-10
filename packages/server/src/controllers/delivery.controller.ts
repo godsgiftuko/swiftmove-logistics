@@ -65,11 +65,12 @@ export default class DeliveryController {
 
   // Fetch stats
   static async fetchStats(
-    _req: Request,
+    req: Request,
     res: Response,
     next: NextFunction
   ) {
-    const response = await DeliveryService.fetchStats();
+    const createdBy = req.query.createdBy as string; 
+    const response = await DeliveryService.fetchStats(createdBy ? createdBy : undefined);
     return new ControllerResponse(res, next).asJSON(response, "Fetched delivery stats successfully");
   }
 }

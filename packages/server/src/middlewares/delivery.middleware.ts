@@ -47,3 +47,14 @@ export const checkDriverAvailability = async (req: Request, _res: Response, next
   
   next();
 };
+
+/**
+ * Middleware to list deliveries by user
+ */
+export const listMyDeliveries = async (req: any, _res: Response, next: NextFunction) => {
+  const user = await UserService.findCurrentUser(req);
+  if (user?.role !== EUserRole.admin) {
+    req.query.createdBy = user?._id;
+  }
+  next();
+};

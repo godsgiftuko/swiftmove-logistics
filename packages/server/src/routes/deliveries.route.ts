@@ -10,6 +10,7 @@ import { expressValidate } from "../middlewares/validation.middleware";
 import {
   assignOnlyDriver,
   checkDriverAvailability,
+  listMyDeliveries,
 } from "../middlewares/delivery.middleware";
 import { paginate } from "../database/helpers/paginate";
 import Delivery, { IDelivery } from "../models/delivery.model";
@@ -22,7 +23,8 @@ router.post(
   expressValidate(validateNewDelivery),
   DeliveryController.createDelivery
 );
-router.get("/", restrictTo(["admin", "manager"]), expressValidate(validateDeliveryStatus), paginate(Delivery), DeliveryController.listAllDeliveries);
+// router.get("/all", restrictTo(["admin"]), expressValidate(validateDeliveryStatus), paginate(Delivery), DeliveryController.listAllDeliveries);
+router.get("/", expressValidate(validateDeliveryStatus), listMyDeliveries, paginate(Delivery), DeliveryController.listAllDeliveries);
 router.put(
   "/:id/assign",
   restrictTo(["admin", "manager"]),
@@ -32,7 +34,7 @@ router.put(
   assignOnlyDriver,
   DeliveryController.assignDriver
 );
-router.get("/stats", restrictTo(["admin"]), DeliveryController.fetchStats);
+router.get("/stats", restrictTo(["admin", "manager"]), listMyDeliveries, DeliveryController.fetchStats);
 
 
 export default router;

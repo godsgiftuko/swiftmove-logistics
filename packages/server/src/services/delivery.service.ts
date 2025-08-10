@@ -108,25 +108,46 @@ export class DeliveryService {
   }
 
   //  Fetch stats
-  static async fetchStats(): Promise<ServiceResponse<IDeliveryStats>> {
+  static async fetchStats(createdBy?: string): Promise<ServiceResponse<IDeliveryStats>> {
+
+    let statusAggregate: any = [
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ];
+
+    let priorityAggregate: any = [
+      {
+        $group: {
+          _id: "$priority",
+          count: { $sum: 1 },
+        },
+      },
+    ];
+
+    if (createdBy) {
+      statusAggregate = [
+        {
+          $match: { createdBy }
+        },
+        ...statusAggregate,
+      ];
+
+      priorityAggregate = [
+        {
+          $match: { createdBy }
+        },
+        ...priorityAggregate,
+      ];
+    }
+
     const [statusStats, total, priorityStats] = await Promise.all([
-      Delivery.aggregate([
-        {
-          $group: {
-            _id: "$status",
-            count: { $sum: 1 },
-          },
-        },
-      ]),
-      Delivery.countDocuments(),
-      Delivery.aggregate([
-        {
-          $group: {
-            _id: "$priority",
-            count: { $sum: 1 },
-          },
-        },
-      ]),
+      Delivery.aggregate(statusAggregate),
+      Delivery.countDocuments(createdBy ? { createdBy } : {}),
+      Delivery.aggregate(priorityAggregate),
     ]);
 
     // Initialize shape

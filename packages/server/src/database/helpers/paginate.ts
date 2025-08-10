@@ -20,6 +20,10 @@ export function paginate<T extends Document>(model: Model<T>, options?: { popula
     if (req.query?.role) {
       filter['role'] = req.query.role;
     }
+
+    if (req.query?.createdBy) {
+      filter['createdBy'] = req.query.createdBy;
+    }
     
     const sortField = (req.query?.sortBy as string) || "createdAt";
     const sortOrder = ((req.query?.sortOrder === "desc") ? -1 : 1) as SortOrder;    
