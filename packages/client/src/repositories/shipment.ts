@@ -1,4 +1,5 @@
 import {
+    EDeliveryStatus,
   IApiPaginatedResponse,
   IApiResponse,
   IDelivery,
@@ -73,6 +74,19 @@ export default class ShipmentRepository {
       `${API.PREFIX}/deliveries/${deliveryId}/assign`,
       {
         driverId,
+      }
+    );
+    return data;
+  }
+
+  // assign driver
+  static async updateStatus(
+    deliveryId: string,
+    status: keyof typeof EDeliveryStatus,
+  ): Promise<IApiResponse<IDelivery>> {
+    const { data } = await api.put<IApiResponse<IDelivery>>(
+      `${API.PREFIX}/deliveries/${deliveryId}/status`,{
+        status,
       }
     );
     return data;
