@@ -165,6 +165,13 @@ export default function ShipmentsTable() {
     return driver ? driver.name : assignedId;
   };
 
+  const deliveryStatusColors: Record<EDeliveryStatus, string> = {
+    [EDeliveryStatus.pending]: "bg-yellow-100 text-yellow-800",
+    [EDeliveryStatus.assigned]: "bg-blue-100 text-blue-800",
+    [EDeliveryStatus.in_transit]: "bg-purple-100 text-purple-800",
+    [EDeliveryStatus.delivered]: "bg-green-100 text-green-800",
+    [EDeliveryStatus.cancelled]: "bg-red-100 text-red-800",
+  };
   return (
     <>
       <div className="overflow-x-auto">
@@ -217,7 +224,7 @@ export default function ShipmentsTable() {
                     <td className="py-3 px-4">{d.trackingNumber}</td>
                     <td className="py-3 px-4">{d.customerName}</td>
                     <td className="py-3 px-4">{d.destinationAddress.city}</td>
-                    <td className="py-3 px-4 capitalize">{d.status}</td>
+                    <td className={`py-3 px-4 capitalize ${deliveryStatusColors[d.status]}`}>{d.status}</td>
                     <td
                       className="py-3 px-4 text-center relative"
                       onClick={(e) => e.stopPropagation()}
@@ -364,6 +371,7 @@ export default function ShipmentsTable() {
 
             <section className="bg-gray-100 p-4 rounded space-y-2">
               <DetailItem
+                className={deliveryStatusColors[selectedDelivery.status]}
                 label="Status"
                 value={selectedDelivery.status}
                 capitalize
@@ -387,6 +395,23 @@ export default function ShipmentsTable() {
                 <p className="whitespace-pre-wrap text-gray-700">
                   {selectedDelivery.notes}
                 </p>
+              </section>
+            )}
+
+            {selectedDelivery.assignedDriver && (
+              <section className="bg-gray-100 p-4 rounded mt-4">
+                <h4 className="font-semibold mb-1">Driver: </h4> <span>{selectedDelivery.assignedDriver}</span>
+                {/* <span className="whitespace-pre-wrap text-gray-700">
+                  Name:   {selectedDelivery.assignedDriver}
+                </span> */}
+                {/* <br />
+                <span className="whitespace-pre-wrap text-gray-700">
+                  Email: 
+                </span>
+                <br />
+                <span className="whitespace-pre-wrap text-gray-700">
+                  Phone: 
+                </span> */}
               </section>
             )}
 
@@ -512,10 +537,12 @@ export default function ShipmentsTable() {
 }
 
 function DetailItem({
+  className,
   label,
   value,
   capitalize = false,
 }: {
+  className?: string,
   label: string;
   value: string;
   capitalize?: boolean;
@@ -523,7 +550,7 @@ function DetailItem({
   return (
     <p>
       <strong>{label}:</strong>{" "}
-      <span className={capitalize ? "capitalize" : undefined}>{value}</span>
+      <span className={`${className || ''} ${capitalize ? "capitalize" : undefined}`}>{value}</span>
     </p>
   );
 }

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Document, Model, SortOrder } from "mongoose";
 
-export function paginate<T extends Document>(model: Model<T>) {
+export function paginate<T extends Document>(model: Model<T>, options?: { populate?: string[] }) {
   return async (
     req: Request,
     res: Response,
@@ -33,6 +33,7 @@ export function paginate<T extends Document>(model: Model<T>) {
         .sort(sort)
         .skip(skip)
         .limit(limit)
+        .populate(options?.populate || '')
         .exec();
 
       const total = await model.countDocuments(filter);

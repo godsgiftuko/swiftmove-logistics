@@ -61,7 +61,7 @@ export const DELIVERY = {
 
 // Security Constants
 export const SECURITY = {
-  BCRYPT_SALT_ROUNDS: 10,
+  BCRYPT_SALT_ROUNDS: 50,
   RATE_LIMIT_WINDOW_MS: 1 * 60 * 1000, // 15 minutes
   RATE_LIMIT_MAX_REQUESTS: 10,
   PASSWORD_RESET_EXPIRY: 60 * 60 * 1000, // 1 hour
