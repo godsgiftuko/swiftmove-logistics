@@ -10,6 +10,13 @@ export default class UserRepository {
     );
     return data;
   }
+  // list drivers
+  static async listDrivers(): Promise<IApiPaginatedResponse<IUser>> {
+    const { data } = await api.get<IApiPaginatedResponse<IUser>>(
+      `${API.PREFIX}/drivers`
+    );
+    return data;
+  }
   // Get driver
   static async getDriver(id: string): Promise<IApiResponse<IUser>> {
     const { data } = await api.get<IApiResponse<IUser>>(
