@@ -1,8 +1,17 @@
-App url - https://swiftmove-logistics-client.vercel.app
-Api doc - https://documenter.getpostman.com/view/8901262/2sB3BDKr9q#d637128f-3c29-43c8-b7b0-6a332f86b2c5
+# SwiftMove Logistics
 
-# Server
-- To install a package use npm install --workspace=server <package>
+SwiftMove Logistics is a logistics management platform designed to streamline shipment creation, driver assignments, and delivery tracking in real time using WebSocket notifications.
+
+## App Links
+- **Client App:** [https://swiftmove-logistics-client.vercel.app](https://swiftmove-logistics-client.vercel.app)
+- **API Documentation:** [View Postman Docs](https://documenter.getpostman.com/view/8901262/2sB3BDKr9q#d637128f-3c29-43c8-b7b0-6a332f86b2c5)
+
+---
+
+## 📦 Server
+To install a package in the server workspace:
+```bash
+npm install --workspace=server <package>
 
 
 # Shipment Flow
@@ -30,3 +39,4 @@ Api doc - https://documenter.getpostman.com/view/8901262/2sB3BDKr9q#d637128f-3c2
         - action to assign a driver by a manager/admin
 - Driver dashboard page
     - update delivery status
+    

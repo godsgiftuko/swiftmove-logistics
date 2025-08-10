@@ -1,6 +1,6 @@
 import { HTTP_STATUS } from "@/constants";
 import { ServiceResponse } from "../types/service";
-import Delivery, { IDelivery } from "../models/delivery.model";
+import Delivery, { EDeliveryStatus, IDelivery } from "../models/delivery.model";
 import { UserService } from "./user.service";
 import mongoose from "mongoose";
 import { IParcel } from "../models/parcel.model";
@@ -50,6 +50,10 @@ export class DeliveryService {
     // save new delivery
     await delivery.save();
 
+
+    // push event
+    WebsocketService.emitEvent('DELIVERY', delivery);
+
     return [delivery, null, HTTP_STATUS.CREATED];
   }
 
@@ -98,7 +102,7 @@ export class DeliveryService {
     await UserService.update(driver._id, {
       status: "busy",
     });
-    
+
     // push event
     WebsocketService.emitEvent('DELIVERY_ASSIGNED', updatedDelivery);
 
@@ -185,5 +189,38 @@ export class DeliveryService {
     });
 
     return [{ statusCount, priorityCount }, null, HTTP_STATUS.OK];
+  }
+
+  //  Update delivery status
+  static async updateStatus(
+    id: mongoose.Types.ObjectId,
+    status: EDeliveryStatus,
+  ): Promise<ServiceResponse<IDelivery>> {
+    const delivery = await Delivery.findByIdAndUpdate({ _id: id }, { status }, {
+      new: true,
+    });
+
+    switch (status) {
+      case EDeliveryStatus.assigned:
+        WebsocketService.emitEvent('DELIVERY_ASSIGNED', delivery);
+        break;
+
+      case EDeliveryStatus.cancelled:
+        WebsocketService.emitEvent('DELIVERY_CANCELLED', delivery);
+        break;
+
+      case EDeliveryStatus.delivered:
+        WebsocketService.emitEvent('DELIVERY_DELIVERED', delivery);
+        break;
+
+      case EDeliveryStatus.in_transit:
+        WebsocketService.emitEvent('DELIVERY_IN_TRANSIT', delivery);
+        break;
+
+      case EDeliveryStatus.pending:
+        WebsocketService.emitEvent('DELIVERY_PENDING', delivery);
+        break;
+    }
+    return [delivery, null, HTTP_STATUS.OK];
   }
 }

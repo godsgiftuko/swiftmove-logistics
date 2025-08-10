@@ -70,3 +70,9 @@ export const validateDeliveryStatus = [
   .isIn(Object.values(EDeliveryStatus))
   .withMessage(`Invalid delivery status. Status must be either ${DELIVERY.STATUS.toString()}`),
 ];
+
+export const validateUpdateStatus = [
+  body("status")
+  .isIn(Object.values(EDeliveryStatus))
+  .withMessage(`Invalid delivery status. Status must be either ${DELIVERY.STATUS.toString()}`),
+];

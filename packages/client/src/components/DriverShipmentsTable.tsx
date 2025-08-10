@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { IDelivery } from "../../../shared/interfaces";
+import { EDeliveryStatus, IDelivery } from "../../../shared/interfaces";
 import ShipmentRepository from "../repositories/shipment";
 import Websocket from "../services/ws";
 
@@ -55,7 +56,7 @@ const DriverShipmentTable = () => {
 
   async function updateStatus(
     id: string,
-    status: "in_transit" | "cancelled" | "delivered"
+    status: keyof typeof EDeliveryStatus
   ) {
     try {
       setUpdatingId(id);
@@ -209,7 +210,7 @@ const DriverShipmentTable = () => {
     filterAndSortDeliveries();
   }, [deliveries, searchTerm, statusFilter, pickupCityFilter, destinationCityFilter, priorityFilter, sortField, sortDirection]);
 
-  Websocket.onEvent('DELIVERY_ASSIGNED', () => {
+  Websocket.onEvent('DELIVERY', () => {
     fetchDeliveries(page);
   });
 

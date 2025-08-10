@@ -72,4 +72,15 @@ export default class DeliveryController {
     const response = await DeliveryService.fetchStats(createdBy ? createdBy : undefined);
     return new ControllerResponse(res, next).asJSON(response, "Fetched delivery stats successfully");
   }
+
+  // update status
+  static async updateStatus(req: Request, res: Response, next: NextFunction) {
+    const { status } = req.body;
+    const deliveryId = req.params.id as unknown as mongoose.Types.ObjectId; 
+    const response = await DeliveryService.updateStatus(deliveryId, status);
+    return new ControllerResponse(res, next).asJSON(
+      response,
+      "Delivery updated successfully"
+    );
+  }
 }

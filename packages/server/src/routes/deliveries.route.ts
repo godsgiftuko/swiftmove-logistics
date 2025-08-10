@@ -5,6 +5,7 @@ import {
   validateAssignDriver,
   validateDeliveryStatus,
   validateNewDelivery,
+  validateUpdateStatus,
 } from "../validators/delivery.validator";
 import { expressValidate } from "../middlewares/validation.middleware";
 import {
@@ -35,6 +36,7 @@ router.put(
   DeliveryController.assignDriver
 );
 router.get("/stats", restrictTo(["admin", "manager"]), listMyDeliveries, DeliveryController.fetchStats);
+router.put("/status", restrictTo(["driver"]), expressValidate(validateUpdateStatus), listMyDeliveries, DeliveryController.fetchStats);
 
 
 export default router;

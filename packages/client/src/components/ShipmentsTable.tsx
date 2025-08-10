@@ -3,6 +3,7 @@ import ShipmentRepository from "../repositories/shipment";
 import { EDeliveryStatus, IDelivery } from "../../../shared/interfaces";
 import UserRepository from "../repositories/user";
 import toast from "react-hot-toast";
+import Websocket from "../services/ws";
 
 interface IDriver {
   _id: string;
@@ -305,6 +306,10 @@ export default function ShipmentsTable() {
     [EDeliveryStatus.delivered]: "bg-green-100 text-green-800",
     [EDeliveryStatus.cancelled]: "bg-red-100 text-red-800",
   };
+
+  Websocket.onEvent('DELIVERY', () => {
+    fetchDeliveries(page);
+  });
 
   return (
     <>
