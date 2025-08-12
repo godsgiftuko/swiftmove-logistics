@@ -1,10 +1,10 @@
-// import { API } from "../../../shared/constants";
+import { API } from "../../../shared/constants";
 import axios from "axios";
 import { store } from "../store/store";
 
 // Create instance
 const api = axios.create({
-//   baseURL: API.BASE_URL,
+  baseURL: API.BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
