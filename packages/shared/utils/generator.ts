@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import ServerConfigs from "packages/server/src/configs";
-import { EUserRole } from "packages/server/src/models/user.model";
+import { EUserRole } from "../interfaces";
+import ServerConfigs from "../../server/src/configs";
 
 type DecodedToken = {
   id: mongoose.Types.ObjectId;
