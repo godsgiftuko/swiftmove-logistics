@@ -2,9 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "SwiftMove Logistics Backend API",
-  "main": "src/index.ts",
+  "main": "api/index.ts",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register api/index.ts",
     "start": "node public/api/index.js",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf node_modules public"
