@@ -14,7 +14,7 @@ export default class ServerConfigs {
 
     static SERVER = {
       PORT: SERVER_PORT,
-      URL: process.env.SERVER_URL || `http://localhost:${SERVER_PORT}${API.PREFIX}`,
+      URL: (process.env.SERVER_URL || `http://localhost:${SERVER_PORT}`) + API.PREFIX,
     };
 
     static JWT = {
