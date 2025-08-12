@@ -16,7 +16,8 @@ export const API = {
   VERSION: "v1",
   TIMEOUT: 30000, // API request timeout in ms
   NAME: 'Swiftmove Logistics',
-  BASE_URL: 'http://localhost:9000',
+  BASE_URL: 'https://swiftmove-logistics-server.vercel.app',
+  // BASE_URL: 'http://localhost:9000',
 };
 
 // HTTP Status Codes
