@@ -2,7 +2,8 @@ import 'module-alias/register';
 import serverless from "serverless-http";
 import app from "../src";
 
-export const handler = serverless(app);
+// export const handler = serverless(app);
+export default serverless(app);
 // import express from 'express';
 // import serverless from 'serverless-http';
 
