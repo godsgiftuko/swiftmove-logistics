@@ -5,7 +5,7 @@ import { API } from "../../../shared/constants";
 import { EWSEvents } from "../../../shared/enums/ws";
 
 export const socket = io(API.BASE_URL, {
-
+    transports: ['polling']
 });
 
 export default class Websocket{
