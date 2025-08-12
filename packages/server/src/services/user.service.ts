@@ -1,12 +1,12 @@
 import { HTTP_STATUS } from "../../../shared/constants";
 import User, { EUserRole, IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
-import Generator from "@/utils/generator";
+import Generator from "../../../shared/utils/generator";
 import { extractBearerToken } from "../helpers/http";
 import { Request } from "express";
 import { UnauthorizedError } from "../errors/http.error";
 import mongoose from "mongoose";
-import { IUserStats } from "@/interfaces";
+import { IUserStats } from "../../../shared/interfaces";
 
 export class UserService {
   //  Create user

@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ButtonLoader from "./ButtonLoader";
-import { IDeliveryPayload } from "@/interfaces";
+import { IDeliveryPayload } from "../../../shared/interfaces";
 
 interface ModalShipmentFormProps {
   isOpen: boolean;

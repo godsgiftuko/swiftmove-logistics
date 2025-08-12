@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../store/authSlice";
 import type { RootState, AppDispatch } from "../store/store";
-import { EUserRole, IUser } from "@/interfaces";
+import { EUserRole, IUser } from "../../../shared/interfaces";
 import Websocket from "../services/ws";
 
 interface AuthContextProps {

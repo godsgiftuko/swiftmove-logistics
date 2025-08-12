@@ -4,7 +4,7 @@ import Delivery, { EDeliveryStatus, IDelivery } from "../models/delivery.model";
 import { UserService } from "./user.service";
 import mongoose from "mongoose";
 import { IParcel } from "../models/parcel.model";
-import { IDeliveryStats } from "@/interfaces";
+import { IDeliveryStats } from "../../../shared/interfaces";
 import WebsocketService from "./ws.service";
 export class DeliveryService {
   //  Create delivery
@@ -175,7 +175,7 @@ export class DeliveryService {
     };
 
     // Map aggregation results into the fixed shape
-    statusStats.forEach((stat) => {
+    statusStats.forEach((stat: any) => {
       if (stat._id && statusCount.hasOwnProperty(stat._id)) {
         statusCount[stat._id as keyof typeof statusCount] = stat.count;
       }

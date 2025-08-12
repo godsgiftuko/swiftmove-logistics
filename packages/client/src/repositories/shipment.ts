@@ -4,7 +4,7 @@ import {
   IApiResponse,
   IDelivery,
   IDeliveryPayload,
-} from "@/interfaces";
+} from "../../../shared/interfaces";
 import { API } from "../../../shared/constants";
 import api from "../lib/api";
 

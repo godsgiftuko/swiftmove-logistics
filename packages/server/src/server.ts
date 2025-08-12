@@ -3,7 +3,7 @@ import { Server as SocketIOServer, Socket } from "socket.io";
 import app from ".";
 import * as dotenv from "dotenv";
 import logger from "./logger";
-import Generator from "@/utils/generator";
+import Generator from "../../shared/utils/generator";
 import { UserService } from "./services/user.service";
 import ServerConfigs  from "./configs";
 

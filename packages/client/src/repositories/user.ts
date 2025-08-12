@@ -1,4 +1,4 @@
-import { IApiPaginatedResponse, IUser, IApiResponse } from "@/interfaces";
+import { IApiPaginatedResponse, IUser, IApiResponse } from "../../../shared/interfaces";
 import { API } from "../../../shared/constants";
 import api from "../lib/api";
 

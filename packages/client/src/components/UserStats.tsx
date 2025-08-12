@@ -1,4 +1,4 @@
-import { IUserStats } from "@/interfaces";
+import { IUserStats } from "../../../shared/interfaces";
 import { UserCircle, UserCircle2 } from "lucide-react";
 import api from "../lib/api";
 import { useEffect, useState } from "react";

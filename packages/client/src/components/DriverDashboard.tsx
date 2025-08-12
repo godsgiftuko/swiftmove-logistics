@@ -1,4 +1,4 @@
-import { IUser } from "@/interfaces";
+import { IUser } from "../../../shared/interfaces";
 import DriverShipmentTable from "./DriverShipmentsTable";
 import DriverInfo from "./DriverInfo";
 

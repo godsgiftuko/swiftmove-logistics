@@ -1,6 +1,6 @@
 import User, { EUserRole, IUser } from "../models/user.model";
 import { ServiceResponse } from "../types/service";
-import Generator from "@/utils/generator";
+import Generator from "../../../shared/utils/generator";
 import { UserService } from "./user.service";
 import { HTTP_STATUS } from "../../../shared/constants";
 
