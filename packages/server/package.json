@@ -5,7 +5,7 @@
   "main": "api/index.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register api/index.ts",
-    "start": "node public/api/index.js",
+    "start": "nodemon --exec ts-node -r tsconfig-paths/register api/index.ts",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf node_modules public"
   },
